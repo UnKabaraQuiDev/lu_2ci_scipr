@@ -4,12 +4,11 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.BiConsumer;
 
 import lu.pcy113.pclib.datastructure.pair.Pair;
 import lu.pcy113.pclib.datastructure.pair.Pairs;
 
-public class Checkers implements BiConsumer<DrawPanel, Graphics2D> {
+public class Checkers implements Drawable {
 
 	public static final int SIDE_COUNT = 8;
 

@@ -201,6 +201,7 @@ public class MainFrame extends JFrame {
 
 	protected void newGame() {
 		drawPanel.setCheckers(new Checkers());
+		repaint();
 	}
 
 	public JSpinner getDestRow() {

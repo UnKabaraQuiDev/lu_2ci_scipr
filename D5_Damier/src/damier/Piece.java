@@ -2,9 +2,8 @@ package damier;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.util.function.BiConsumer;
 
-public class Piece implements BiConsumer<DrawPanel, Graphics2D> {
+public class Piece implements Drawable {
 
 	private static final double SIZE_FACTOR = 0.9;
 
