@@ -4,6 +4,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.List;
 
 import lu.pcy113.pclib.PCUtils;
 import lu.pcy113.pclib.db.DataBaseTable;
@@ -16,6 +17,8 @@ import lu.pcy113.pclib.db.impl.SQLEntry.SafeSQLEntry;
 import lu.pcy113.pclib.db.impl.SQLQuery;
 import lu.pcy113.pclib.db.impl.SQLQuery.SafeSQLQuery;
 
+import lu.kbra.api_test.db.tables.UserSanctionTable;
+
 @GeneratedKey("id")
 public class UserData implements SafeSQLEntry {
 
@@ -23,11 +26,12 @@ public class UserData implements SafeSQLEntry {
 	private String name, pass, token;
 	private Timestamp joinDate, lastLoginDate;
 
+	private List<UserSanctionData> sanctions;
+
 	public UserData() {
 	}
 
-	public UserData(int id, String name, String pass, String token, Timestamp joinDate, Timestamp lastLoginDate) {
-		this.id = id;
+	public UserData(String name, String pass, String token, Timestamp joinDate, Timestamp lastLoginDate) {
 		this.name = name;
 		this.pass = pass;
 		this.token = token;
@@ -60,6 +64,14 @@ public class UserData implements SafeSQLEntry {
 		return this;
 	}
 
+	public List<UserSanctionData> loadSanction() {
+		return sanctions = UserSanctionTable.byUser(this);
+	}
+
+	public List<UserSanctionData> getSanctions() {
+		return sanctions;
+	}
+
 	@Override
 	public <T extends SQLEntry> String getPreparedInsertSQL(DataBaseTable<T> table) {
 		return SQLBuilder.safeInsert(table, new String[] { "name", "pass" });
@@ -79,11 +91,6 @@ public class UserData implements SafeSQLEntry {
 	public <T extends SQLEntry> String getPreparedSelectSQL(DataBaseTable<T> table) {
 		return SQLBuilder.safeSelect(table, new String[] { "id" });
 	}
-
-	/*@Override
-	public <T extends SQLEntry> String getPreparedQuerySQL(DataBaseTable<T> table) {
-		return SQLBuilder.safeSelect(table, new String[] { "name", "pass" });
-	}*/
 
 	@Override
 	public void prepareInsertSQL(PreparedStatement stmt) throws SQLException {
@@ -108,12 +115,6 @@ public class UserData implements SafeSQLEntry {
 	public void prepareSelectSQL(PreparedStatement stmt) throws SQLException {
 		stmt.setInt(1, id);
 	}
-
-	/*@Override
-	public void prepareQuerySQL(PreparedStatement stmt) throws SQLException {
-		stmt.setString(1, name);
-		stmt.setString(2, pass);
-	}*/
 
 	@Override
 	public UserData clone() {
@@ -158,13 +159,13 @@ public class UserData implements SafeSQLEntry {
 
 	@Override
 	public String toString() {
-		return "UserData [id=" + id + ", name=" + name + ", pass=" + pass + ", joinDate=" + joinDate + ", lastLoginDate=" + lastLoginDate + "]";
+		return "UserData {id=" + id + ", name=" + name + ", pass=" + pass + ", joinDate=" + joinDate + ", lastLoginDate=" + lastLoginDate + ", sanctions=" + sanctions + "}";
 	}
 
 	public static String hashPass(String rawPass) {
 		return PCUtils.hashString(rawPass, "SHA-256");
 	}
-	
+
 	public static String genNewToken(String hashedPass) {
 		return UserData.hashPass(hashedPass + System.currentTimeMillis());
 	}

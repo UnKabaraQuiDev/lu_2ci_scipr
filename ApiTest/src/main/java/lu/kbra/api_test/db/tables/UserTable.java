@@ -29,7 +29,7 @@ import lu.kbra.api_test.utils.SpringUtils;
 })
 public class UserTable extends DataBaseTable<UserData> {
 
-	private static final ExceptionFunction<ReturnData<List<UserData>>, UserData> MULTI_MAP = SpringUtils.listMultiMap();
+	private static final ExceptionFunction<ReturnData<List<UserData>>, UserData> MULTI_MAP = SpringUtils.list2FirstMultiMap();
 	
 	public static UserTable TABLE;
 
@@ -57,7 +57,7 @@ public class UserTable extends DataBaseTable<UserData> {
 		return ud;
 	}
 	
-	@CacheEvict(value = "users", key = "#userData.id")
+	@CacheEvict(value = "userDataCache", key = "#userData.id")
 	public static void updateUserData(UserData userData) {
 		UserTable.TABLE.update(userData).run();
 	}

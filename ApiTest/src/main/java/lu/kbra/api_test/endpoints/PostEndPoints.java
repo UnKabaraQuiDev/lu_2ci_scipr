@@ -28,7 +28,7 @@ import lu.kbra.api_test.utils.SpringUtils;
 @RequestMapping("/post")
 public class PostEndPoints {
 
-	private static final ExceptionFunction<ReturnData<PostData>, PostData> MULTI_MAP_SINGLE = SpringUtils.singleMultiMap();
+	private static final ExceptionFunction<ReturnData<PostData>, PostData> MULTI_MAP_SINGLE = SpringUtils.single2SingleMultiMap();
 
 	@PostMapping(value = "/send", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public SendResponse send(@CookieValue(value = "token", required = true) String token, @RequestBody SendRequest request, HttpServletResponse response) throws Exception {

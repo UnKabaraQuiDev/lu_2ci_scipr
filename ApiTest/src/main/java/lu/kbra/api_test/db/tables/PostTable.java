@@ -30,7 +30,7 @@ public class PostTable extends DataBaseTable<PostData> {
 
 	public static final int MAX_TITLE_LENGTH = 128;
 
-	private static final ExceptionFunction<ReturnData<List<PostData>>, PostData> MULTI_MAP = SpringUtils.listMultiMap();
+	private static final ExceptionFunction<ReturnData<List<PostData>>, PostData> MULTI_MAP = SpringUtils.list2FirstMultiMap();
 
 	public static PostTable TABLE;
 
