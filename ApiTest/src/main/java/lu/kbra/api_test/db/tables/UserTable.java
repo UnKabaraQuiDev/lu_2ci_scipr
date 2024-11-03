@@ -39,21 +39,18 @@ public class UserTable extends DataBaseTable<UserData> {
 
 	@Cacheable(value = "userDataCache", key = "#user + ':' + #pass")
 	public static UserData byLogin(String user, String pass) {
-		UserData ud = UserTable.TABLE.query(UserData.loginRaw(user, pass)).thenApply(MULTI_MAP).catch_((e) -> {
-			if (ApiTestApplication.DEBUG)
-				Logger.getLogger(UserEndPoints.class.getName()).log(Level.SEVERE, "Error while fetching login data: ", e);
-			return null;
-		}).run();
+		UserData ud = UserTable.TABLE.query(UserData.loginRaw(user, pass))
+				.thenApply(MULTI_MAP)
+				.catch_(UserTable::logErr)
+				.run();
 		return ud;
 	}
 	
 	@Cacheable(value = "userDataCache", key = "#token")
 	public static UserData byToken(String token) {
-		UserData ud = UserTable.TABLE.query(UserData.byRawToken(token)).thenApply(MULTI_MAP).catch_((e) -> {
-			if (ApiTestApplication.DEBUG)
-				Logger.getLogger(UserEndPoints.class.getName()).log(Level.SEVERE, "Error while fetching login data: ", e);
-			return null;
-		}).run();
+		UserData ud = UserTable.TABLE.query(UserData.byRawToken(token))
+				.thenApply(MULTI_MAP)
+				.catch_(UserTable::logErr).run();
 		return ud;
 	}
 	
@@ -64,12 +61,16 @@ public class UserTable extends DataBaseTable<UserData> {
 
 	@Cacheable(value = "userDataCache", key = "#id")
 	public static UserData byId(int id) {
-		UserData ud = UserTable.TABLE.query(UserData.byId(id)).thenApply(MULTI_MAP).catch_((e) -> {
-			if (ApiTestApplication.DEBUG)
-				Logger.getLogger(UserEndPoints.class.getName()).log(Level.SEVERE, "Error while fetching user data: ", e);
-			return null;
-		}).run();
+		UserData ud = UserTable.TABLE.query(UserData.byId(id))
+				.thenApply(MULTI_MAP)
+				.catch_(UserTable::logErr)
+				.run();
 		return ud;
+	}
+
+	private static void logErr(Exception e) {
+		if (ApiTestApplication.DEBUG)
+			Logger.getLogger(UserEndPoints.class.getName()).log(Level.SEVERE, "Error while fetching login data: ", e);
 	}
 	
 }

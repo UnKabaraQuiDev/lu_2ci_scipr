@@ -39,11 +39,13 @@ public class PostTable extends DataBaseTable<PostData> {
 	}
 
 	public static PostData byId(int id) {
-		PostData ud = PostTable.TABLE.query(PostData.byId(id)).thenApply(MULTI_MAP).catch_((e) -> {
-			if (ApiTestApplication.DEBUG)
-				Logger.getLogger(UserEndPoints.class.getName()).log(Level.SEVERE, "Error while fetching post data: ", e);
-			return null;
-		}).run();
+		PostData ud = PostTable.TABLE.query(PostData.byId(id))
+				.thenApply(MULTI_MAP)
+				.catch_((e) -> {
+					if (ApiTestApplication.DEBUG)
+						Logger.getLogger(UserEndPoints.class.getName()).log(Level.SEVERE, "Error while fetching post data: ", e);
+				})
+				.run();
 		return ud;
 	}
 

@@ -14,8 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import lu.pcy113.pclib.PCUtils;
-import lu.pcy113.pclib.db.ReturnData;
-import lu.pcy113.pclib.impl.ExceptionFunction;
 
 import jakarta.servlet.http.HttpServletResponse;
 import lu.kbra.api_test.db.data.PostData;
@@ -27,8 +25,6 @@ import lu.kbra.api_test.utils.SpringUtils;
 @RestController
 @RequestMapping("/post")
 public class PostEndPoints {
-
-	private static final ExceptionFunction<ReturnData<PostData>, PostData> MULTI_MAP_SINGLE = SpringUtils.single2SingleMultiMap();
 
 	@PostMapping(value = "/send", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public SendResponse send(@CookieValue(value = "token", required = true) String token, @RequestBody SendRequest request, HttpServletResponse response) throws Exception {
@@ -53,7 +49,10 @@ public class PostEndPoints {
 
 		PostData post = new PostData(ud, title, content);
 
-		post = PostTable.TABLE.insert(post).run().<PostData>multiMap(u -> u, e -> PCUtils.throw_(new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage())), u -> u, u -> u);
+		post = PostTable.TABLE.insert(post)
+				.catch_(e -> PCUtils.throw_(new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage())))
+				.thenApply(e -> e.getData() == null ? PCUtils.throw_(new Exception("Error while inserting post data.")) : e.getData())
+				.runThrow();
 
 		if (post == null) {
 			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error while inserting post data.");

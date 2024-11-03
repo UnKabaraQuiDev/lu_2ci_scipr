@@ -18,6 +18,7 @@ import lu.kbra.api_test.db.data.UserSanctionData;
 import lu.kbra.api_test.endpoints.UserEndPoints;
 import lu.kbra.api_test.utils.SpringUtils;
 
+//@formatter:off
 @DB_Table(name = "user_sanctions", columns = {
 		@Column(name = "id", type = "int", autoIncrement = true, primaryKey = true),
 		@Column(name = "user_id", type = "int"),
@@ -30,6 +31,7 @@ import lu.kbra.api_test.utils.SpringUtils;
 		@Constraint(name = "fk_author_id", foreignKey = "author_id", referenceTable = "users", referenceColumn = "id"),
 		@Constraint(name = "fk_reason_id", foreignKey = "reason_id", referenceTable = "user_sanction_reasons", referenceColumn = "id")
 })
+//@formatter:on
 public class UserSanctionTable extends DataBaseTable<UserSanctionData> {
 
 	private static final ExceptionFunction<ReturnData<List<UserSanctionData>>, List<UserSanctionData>> MULTI_MAP = SpringUtils.single2SingleMultiMap();
@@ -41,11 +43,10 @@ public class UserSanctionTable extends DataBaseTable<UserSanctionData> {
 	}
 
 	public static List<UserSanctionData> byToken(String token) {
-		List<UserSanctionData> listUsd = UserSanctionTable.TABLE.query(UserSanctionData.byUserToken(token)).thenApply(MULTI_MAP).catch_((e) -> {
-			if (ApiTestApplication.DEBUG)
-				Logger.getLogger(UserEndPoints.class.getName()).log(Level.SEVERE, "Error while fetching user sanction data: ", e);
-			return null;
-		}).run();
+		List<UserSanctionData> listUsd = UserSanctionTable.TABLE.query(UserSanctionData.byUserToken(token))
+				.thenApply(MULTI_MAP)
+				.catch_(UserSanctionTable::logErr)
+				.run();
 		return listUsd;
 	}
 	
@@ -54,20 +55,18 @@ public class UserSanctionTable extends DataBaseTable<UserSanctionData> {
 	}
 
 	public static List<UserSanctionData> byUserId(int id) {
-		List<UserSanctionData> listUsd = UserSanctionTable.TABLE.query(UserSanctionData.byUserId(id)).thenApply(MULTI_MAP).catch_((e) -> {
-			if (ApiTestApplication.DEBUG)
-				Logger.getLogger(UserEndPoints.class.getName()).log(Level.SEVERE, "Error while fetching user sanction data: ", e);
-			return null;
-		}).run();
+		List<UserSanctionData> listUsd = UserSanctionTable.TABLE.query(UserSanctionData.byUserId(id))
+				.thenApply(MULTI_MAP)
+				.catch_(UserSanctionTable::logErr)
+				.run();
 		return listUsd;
 	}
 	
 	public static List<UserSanctionData> byAuthorId(int id) {
-		List<UserSanctionData> listUsd = UserSanctionTable.TABLE.query(UserSanctionData.byAuthorId(id)).thenApply(MULTI_MAP).catch_((e) -> {
-			if (ApiTestApplication.DEBUG)
-				Logger.getLogger(UserEndPoints.class.getName()).log(Level.SEVERE, "Error while fetching user sanction data: ", e);
-			return null;
-		}).run();
+		List<UserSanctionData> listUsd = UserSanctionTable.TABLE.query(UserSanctionData.byAuthorId(id))
+				.thenApply(MULTI_MAP)
+				.catch_(UserSanctionTable::logErr)
+				.run();
 		return listUsd;
 	}
 
@@ -77,6 +76,11 @@ public class UserSanctionTable extends DataBaseTable<UserSanctionData> {
 	
 	public static List<UserSanctionData> byAuthor(UserData author) {
 		return byAuthorId(author.getId());
+	}
+	
+	private static void logErr(Exception e) {
+		if (ApiTestApplication.DEBUG)
+			Logger.getLogger(UserEndPoints.class.getName()).log(Level.SEVERE, "Error while fetching user sanction data: ", e);
 	}
 	
 }

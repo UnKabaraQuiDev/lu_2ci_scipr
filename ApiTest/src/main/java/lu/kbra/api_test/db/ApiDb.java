@@ -20,9 +20,8 @@ public class ApiDb extends DataBase {
 		final Logger logger = Logger.getLogger(ApiDb.class.getName());
 
 		table.create().thenConsume((e) -> {
-			e.ifCreated((d) -> logger.info("Table: " + name + " created"));
 			e.ifError((d) -> logger.severe("Error creating Table: " + name));
-			e.ifExisted((d) -> logger.info("Table: " + name + " already exists"));
+			e.ifOk((d) -> logger.info(d.created() ? "Table: " + name + " created" : "Table: " + name + " already exists"));
 
 			e.ifError(d -> d.printStackTrace());
 		}).run();
@@ -33,9 +32,8 @@ public class ApiDb extends DataBase {
 		final Logger logger = Logger.getLogger(ApiDb.class.getName());
 
 		super.create().thenConsume((e) -> {
-			e.ifCreated((d) -> logger.info("Base: " + name + " created"));
 			e.ifError((d) -> logger.severe("Error creating Base: " + name));
-			e.ifExisted((d) -> logger.info("Base: " + name + " already exists"));
+			e.ifOk((d) -> logger.info(d.created() ? "Base: " + name + " created" : "Base: " + name + " already exists"));
 
 			e.ifError(d -> d.printStackTrace());
 		}).run();
