@@ -3,24 +3,25 @@ package vector_line_painter;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Point;
 
 public class Line implements Drawable {
 
 	private Color color = Color.BLACK;
 	private float thickness = 2;
-	private Point2D p0, p1;
+	private Point p0, p1;
 
 	public Line(int x0, int y0, int x1, int y1) {
-		p0 = new Point2D(x0, y0);
-		p1 = new Point2D(x1, y1);
+		p0 = new Point(x0, y0);
+		p1 = new Point(x1, y1);
 	}
 
-	public Line(Point2D p0, Point2D p1) {
+	public Line(Point p0, Point p1) {
 		this.p0 = p0;
 		this.p1 = p1;
 	}
 
-	public Line(Color color, float thickness, Point2D p0, Point2D p1) {
+	public Line(Color color, float thickness, Point p0, Point p1) {
 		this.color = color;
 		this.thickness = thickness;
 		this.p0 = p0;
@@ -31,15 +32,39 @@ public class Line implements Drawable {
 	public void accept(Graphics2D g2d) {
 		g2d.setStroke(new BasicStroke(thickness));
 		g2d.setColor(color);
-		g2d.drawLine(p0.getX(), p0.getY(), p1.getX(), p1.getY());
+		g2d.drawLine((int) p0.getX(), (int) p0.getY(), (int) p1.getX(), (int) p1.getY());
 	}
 
-	public Point2D getP0() {
+	public Color getColor() {
+		return color;
+	}
+
+	public void setColor(Color color) {
+		this.color = color;
+	}
+
+	public float getThickness() {
+		return thickness;
+	}
+
+	public void setThickness(float thickness) {
+		this.thickness = thickness;
+	}
+
+	public Point getP0() {
 		return p0;
 	}
 
-	public Point2D getP1() {
+	public void setP0(Point p0) {
+		this.p0 = p0;
+	}
+
+	public Point getP1() {
 		return p1;
+	}
+
+	public void setP1(Point p1) {
+		this.p1 = p1;
 	}
 
 	@Override
