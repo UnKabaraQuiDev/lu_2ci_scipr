@@ -19,7 +19,6 @@ public class MainFrame extends JFrame implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	private JButton btnNewButton;
 	private JSpinner p1y;
 	private JSpinner p1x;
 	private JSpinner p0x;
@@ -31,7 +30,7 @@ public class MainFrame extends JFrame implements ActionListener {
 		drawPanel.getLines().add(new Line((int) p0x.getValue(), (int) p0y.getValue(), (int) p1x.getValue(), (int) p1y.getValue()));
 		drawPanel.repaint();
 	}
-	
+
 	/**
 	 * Create the frame.
 	 */
@@ -47,16 +46,16 @@ public class MainFrame extends JFrame implements ActionListener {
 		JPanel panel = new JPanel();
 		contentPane.add(panel, BorderLayout.NORTH);
 		GridBagLayout gbl_panel = new GridBagLayout();
-		gbl_panel.columnWidths = new int[] { 0, 0, 0, 0, 0, 0 };
+		gbl_panel.columnWidths = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 		gbl_panel.rowHeights = new int[] { 40, 0 };
-		gbl_panel.columnWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
-		gbl_panel.rowWeights = new double[] { 0.0, Double.MIN_VALUE };
+		gbl_panel.columnWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
+		gbl_panel.rowWeights = new double[] { 0.0, 0.0 };
 		panel.setLayout(gbl_panel);
 
 		JLabel newLineLbl = new JLabel("New line from");
 		GridBagConstraints gbc_newLineLbl = new GridBagConstraints();
 		gbc_newLineLbl.fill = GridBagConstraints.BOTH;
-		gbc_newLineLbl.insets = new Insets(0, 0, 0, 5);
+		gbc_newLineLbl.insets = new Insets(0, 0, 5, 5);
 		gbc_newLineLbl.gridx = 0;
 		gbc_newLineLbl.gridy = 0;
 		panel.add(newLineLbl, gbc_newLineLbl);
@@ -65,7 +64,7 @@ public class MainFrame extends JFrame implements ActionListener {
 		GridBagConstraints gbc_panel_1 = new GridBagConstraints();
 		gbc_panel_1.weightx = 1.0;
 		gbc_panel_1.fill = GridBagConstraints.BOTH;
-		gbc_panel_1.insets = new Insets(0, 0, 0, 5);
+		gbc_panel_1.insets = new Insets(0, 0, 5, 5);
 		gbc_panel_1.gridx = 1;
 		gbc_panel_1.gridy = 0;
 		panel.add(panel_1, gbc_panel_1);
@@ -113,7 +112,7 @@ public class MainFrame extends JFrame implements ActionListener {
 		JLabel lblNewLabel_4 = new JLabel("to");
 		GridBagConstraints gbc_lblNewLabel_4 = new GridBagConstraints();
 		gbc_lblNewLabel_4.fill = GridBagConstraints.BOTH;
-		gbc_lblNewLabel_4.insets = new Insets(0, 0, 0, 5);
+		gbc_lblNewLabel_4.insets = new Insets(0, 0, 5, 5);
 		gbc_lblNewLabel_4.gridx = 2;
 		gbc_lblNewLabel_4.gridy = 0;
 		panel.add(lblNewLabel_4, gbc_lblNewLabel_4);
@@ -122,7 +121,7 @@ public class MainFrame extends JFrame implements ActionListener {
 		GridBagConstraints gbc_panel_2 = new GridBagConstraints();
 		gbc_panel_2.weightx = 1.0;
 		gbc_panel_2.fill = GridBagConstraints.BOTH;
-		gbc_panel_2.insets = new Insets(0, 0, 0, 5);
+		gbc_panel_2.insets = new Insets(0, 0, 5, 5);
 		gbc_panel_2.gridx = 3;
 		gbc_panel_2.gridy = 0;
 		panel.add(panel_2, gbc_panel_2);
@@ -156,7 +155,7 @@ public class MainFrame extends JFrame implements ActionListener {
 		gbc_lblNewLabel_3.gridx = 0;
 		gbc_lblNewLabel_3.gridy = 1;
 		panel_2.add(lblNewLabel_3, gbc_lblNewLabel_3);
-		
+
 		p1y = new JSpinner();
 		GridBagConstraints gbc_spinner_3 = new GridBagConstraints();
 		gbc_spinner_3.weightx = 1.0;
@@ -165,10 +164,19 @@ public class MainFrame extends JFrame implements ActionListener {
 		gbc_spinner_3.gridy = 1;
 		panel_2.add(p1y, gbc_spinner_3);
 
-		btnNewButton = new JButton("Add");
+		JButton colorBtn = new JButton("Color");
+		GridBagConstraints gbc_btnNewButton_1 = new GridBagConstraints();
+		gbc_btnNewButton_1.fill = GridBagConstraints.VERTICAL;
+		gbc_btnNewButton_1.insets = new Insets(0, 0, 5, 5);
+		gbc_btnNewButton_1.gridx = 4;
+		gbc_btnNewButton_1.gridy = 0;
+		panel.add(colorBtn, gbc_btnNewButton_1);
+
+		JButton btnNewButton = new JButton("Add");
 		GridBagConstraints gbc_btnNewButton = new GridBagConstraints();
+		gbc_btnNewButton.insets = new Insets(0, 0, 5, 0);
 		gbc_btnNewButton.fill = GridBagConstraints.BOTH;
-		gbc_btnNewButton.gridx = 4;
+		gbc_btnNewButton.gridx = 5;
 		gbc_btnNewButton.gridy = 0;
 		panel.add(btnNewButton, gbc_btnNewButton);
 
