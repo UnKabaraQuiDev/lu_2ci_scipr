@@ -14,8 +14,6 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
-import javax.swing.SpinnerModel;
-import javax.swing.SpinnerNumberModel;
 import javax.swing.border.EmptyBorder;
 
 import lu.pcy113.pclib.datastructure.pair.Pair;
@@ -33,17 +31,23 @@ public class MainFrame extends JFrame {
 	private JSpinner startCol;
 	private JSpinner startRow;
 
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					MainFrame frame = new MainFrame();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
+	protected void movePiece() {
+		try {
+			final Pair<Boolean, String> msg = drawPanel.getCheckers().move(Integer.parseInt(startCol.getValue().toString()), Integer.parseInt(startRow.getValue().toString()),
+					Integer.parseInt(destCol.getValue().toString()), Integer.parseInt(destRow.getValue().toString()));
+			outputLabel.setText(msg.getValue());
+			outputLabel.setForeground(msg.getKey() ? Color.GREEN : Color.RED);
+		} catch (NumberFormatException e) {
+			outputLabel.setText(e.getMessage());
+			outputLabel.setForeground(Color.RED);
+		}
+
+		super.repaint();
+	}
+
+	protected void newGame() {
+		drawPanel.setCheckers(new Checkers());
+		repaint();
 	}
 
 	public MainFrame() {
@@ -82,7 +86,7 @@ public class MainFrame extends JFrame {
 		panel.add(lblCol, gbc_lblCol);
 
 		startCol = new JSpinner();
-		startCol.setModel(getSpinnerModel());
+		// startCol.setModel(getSpinnerModel());
 		GridBagConstraints gbc_startCol = new GridBagConstraints();
 		gbc_startCol.insets = new Insets(0, 0, 5, 5);
 		gbc_startCol.gridx = 2;
@@ -90,7 +94,7 @@ public class MainFrame extends JFrame {
 		panel.add(startCol, gbc_startCol);
 
 		JLabel lblRow = new JLabel("Row:");
-		startCol.setModel(getSpinnerModel());
+		// startCol.setModel(getSpinnerModel());
 		GridBagConstraints gbc_lblRow = new GridBagConstraints();
 		gbc_lblRow.insets = new Insets(0, 0, 5, 5);
 		gbc_lblRow.gridx = 3;
@@ -126,7 +130,7 @@ public class MainFrame extends JFrame {
 		panel.add(destLbl, gbc_destLbl);
 
 		JLabel lblCol_1 = new JLabel("Col:");
-		startCol.setModel(getSpinnerModel());
+		// startCol.setModel(getSpinnerModel());
 		GridBagConstraints gbc_lblCol_1 = new GridBagConstraints();
 		gbc_lblCol_1.insets = new Insets(0, 0, 0, 5);
 		gbc_lblCol_1.gridx = 1;
@@ -141,7 +145,7 @@ public class MainFrame extends JFrame {
 		panel.add(destCol, gbc_destCol);
 
 		JLabel lblRow_1 = new JLabel("Row:");
-		startCol.setModel(getSpinnerModel());
+		// startCol.setModel(getSpinnerModel());
 		GridBagConstraints gbc_lblRow_1 = new GridBagConstraints();
 		gbc_lblRow_1.insets = new Insets(0, 0, 0, 5);
 		gbc_lblRow_1.gridx = 3;
@@ -182,27 +186,9 @@ public class MainFrame extends JFrame {
 		});
 	}
 
-	private SpinnerModel getSpinnerModel() {
+	/*private SpinnerModel getSpinnerModel() {
 		return new SpinnerNumberModel(0, 0, Checkers.SIDE_COUNT, 1);
-	}
-
-	protected void movePiece() {
-		try {
-			final Pair<Boolean, String> msg = drawPanel.getCheckers().move(Integer.parseInt(startCol.getValue().toString()), Integer.parseInt(startRow.getValue().toString()), Integer.parseInt(destCol.getValue().toString()), Integer.parseInt(destRow.getValue().toString()));
-			outputLabel.setText(msg.getValue());
-			outputLabel.setForeground(msg.getKey() ? Color.GREEN : Color.RED);
-		} catch (NumberFormatException e) {
-			outputLabel.setText(e.getMessage());
-			outputLabel.setForeground(Color.RED);
-		}
-
-		super.repaint();
-	}
-
-	protected void newGame() {
-		drawPanel.setCheckers(new Checkers());
-		repaint();
-	}
+	}*/
 
 	public JSpinner getDestRow() {
 		return destRow;
@@ -219,4 +205,18 @@ public class MainFrame extends JFrame {
 	public JSpinner getStartCol() {
 		return startCol;
 	}
+
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					MainFrame frame = new MainFrame();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
 }

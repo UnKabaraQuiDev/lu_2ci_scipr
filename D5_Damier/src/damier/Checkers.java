@@ -8,7 +8,7 @@ import java.util.List;
 import lu.pcy113.pclib.datastructure.pair.Pair;
 import lu.pcy113.pclib.datastructure.pair.Pairs;
 
-public class Checkers implements Drawable {
+public class Checkers implements DrawPanelDrawable {
 
 	public static final int SIDE_COUNT = 8;
 
@@ -25,12 +25,15 @@ public class Checkers implements Drawable {
 	public Pair<Boolean, String> move(int srcX, int srcY, int destX, int destY) {
 		srcX = Math.clamp(srcX, 0, SIDE_COUNT - 1);
 		srcY = Math.clamp(srcY, 0, SIDE_COUNT - 1);
-		destX = Math.clamp(destX, 0, SIDE_COUNT - 1);
-		destY = Math.clamp(destY, 0, SIDE_COUNT - 1);
-
-		Piece piece = getPieceAt(srcX, srcY);
-		if (piece == null) {
+		
+		Piece srcPiece = getPieceAt(srcX, srcY);
+		if (srcPiece == null) {
 			return Pairs.readOnly(false, "No piece at [" + srcX + "," + srcY + "]");
+		}
+		
+		if(Math.clamp(destX, 0, SIDE_COUNT - 1) != destX || Math.clamp(destY, 0, SIDE_COUNT - 1) != destY) { // oob
+			pieces.remove(srcPiece);
+			return Pairs.readOnly(true, "Piece at [" + srcX + "," + srcY + "] removed");
 		}
 		
 		Piece destPiece = getPieceAt(destX, destY);
@@ -38,7 +41,7 @@ public class Checkers implements Drawable {
 			return Pairs.readOnly(false, "Piece at [" + destX + "," + destY + "]");
 		}
 
-		piece.moveTo(destX, destY);
+		srcPiece.moveTo(destX, destY);
 
 		return Pairs.readOnly(true, "[" + srcX + "," + srcY + "] to [" + destX + "," + destY + "]");
 	}

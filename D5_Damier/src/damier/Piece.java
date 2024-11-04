@@ -3,7 +3,7 @@ package damier;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
-public class Piece implements Drawable {
+public class Piece implements DrawPanelDrawable {
 
 	private static final double SIZE_FACTOR = 0.9;
 
