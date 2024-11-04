@@ -6,16 +6,18 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JColorChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.ChangeEvent;
 
-public class MainFrame extends JFrame implements ActionListener {
+public class MainFrame extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
@@ -24,11 +26,14 @@ public class MainFrame extends JFrame implements ActionListener {
 	private JSpinner p0x;
 	private JSpinner p0y;
 	private DrawPanel drawPanel;
+	private JColorChooser colorChooser;
 
-	@Override
-	public void actionPerformed(ActionEvent evt) {
-		drawPanel.getLines().add(new Line((int) p0x.getValue(), (int) p0y.getValue(), (int) p1x.getValue(), (int) p1y.getValue()));
-		drawPanel.repaint();
+	private void addLine(ActionEvent actionevent1) {
+		drawPanel.addLine((int) p0x.getValue(), (int) p0y.getValue(), (int) p1x.getValue(), (int) p1y.getValue());
+	}
+	
+	private void changeColor(ChangeEvent evt) {
+		drawPanel.setColor(colorChooser.getColor());
 	}
 
 	/**
@@ -46,10 +51,6 @@ public class MainFrame extends JFrame implements ActionListener {
 		JPanel panel = new JPanel();
 		contentPane.add(panel, BorderLayout.NORTH);
 		GridBagLayout gbl_panel = new GridBagLayout();
-		gbl_panel.columnWidths = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-		gbl_panel.rowHeights = new int[] { 40, 0 };
-		gbl_panel.columnWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
-		gbl_panel.rowWeights = new double[] { 0.0, 0.0 };
 		panel.setLayout(gbl_panel);
 
 		JLabel newLineLbl = new JLabel("New line from");
@@ -164,26 +165,25 @@ public class MainFrame extends JFrame implements ActionListener {
 		gbc_spinner_3.gridy = 1;
 		panel_2.add(p1y, gbc_spinner_3);
 
-		JButton colorBtn = new JButton("Color");
-		GridBagConstraints gbc_btnNewButton_1 = new GridBagConstraints();
-		gbc_btnNewButton_1.fill = GridBagConstraints.VERTICAL;
-		gbc_btnNewButton_1.insets = new Insets(0, 0, 5, 5);
-		gbc_btnNewButton_1.gridx = 4;
-		gbc_btnNewButton_1.gridy = 0;
-		panel.add(colorBtn, gbc_btnNewButton_1);
-
 		JButton btnNewButton = new JButton("Add");
 		GridBagConstraints gbc_btnNewButton = new GridBagConstraints();
 		gbc_btnNewButton.insets = new Insets(0, 0, 5, 0);
 		gbc_btnNewButton.fill = GridBagConstraints.BOTH;
-		gbc_btnNewButton.gridx = 5;
+		gbc_btnNewButton.gridx = 4;
 		gbc_btnNewButton.gridy = 0;
 		panel.add(btnNewButton, gbc_btnNewButton);
 
 		drawPanel = new DrawPanel();
 		contentPane.add(drawPanel, BorderLayout.CENTER);
+		
+		colorChooser = new JColorChooser();
+		colorChooser.getSelectionModel().addChangeListener(this::changeColor);
+		colorChooser.setBorder(BorderFactory.createTitledBorder("Choose Line Color"));
+		contentPane.add(colorChooser, BorderLayout.SOUTH);
 
-		btnNewButton.addActionListener(this);
+		btnNewButton.addActionListener(this::addLine);
+		
+		super.pack();
 	}
 
 	/**

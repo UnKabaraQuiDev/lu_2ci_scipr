@@ -1,6 +1,7 @@
 package vector_line_painter;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
@@ -14,11 +15,15 @@ public class DrawPanel extends JPanel implements Drawable {
 
 	private List<Line> lines = new ArrayList<>();
 
+	private Color color = Color.BLACK;
+
 	/**
 	 * Create the panel.
 	 */
 	public DrawPanel() {
 		super.setBackground(Color.WHITE);
+		super.setMinimumSize(new Dimension(500, 500));
+		super.setPreferredSize(new Dimension(500, 500));
 	}
 
 	@Override
@@ -37,8 +42,26 @@ public class DrawPanel extends JPanel implements Drawable {
 		this.accept((Graphics2D) g);
 	}
 
+	public void addLine(int x0, int y0, int x1, int y1) {
+		lines.add(new Line(x0, y0, x1, y1, color));
+		repaint();
+	}
+	
+	public void clear() {
+		lines.clear();
+		repaint();
+	}
+	
 	public void setLines(List<Line> lines) {
 		this.lines = lines;
+	}
+
+	public Color getColor() {
+		return color;
+	}
+
+	public void setColor(Color color) {
+		this.color = color;
 	}
 
 	public List<Line> getLines() {

@@ -27,6 +27,11 @@ public class Line implements Drawable {
 		this.p0 = p0;
 		this.p1 = p1;
 	}
+	
+	public Line(int x0, int y0, int x1, int y1, Color color) {
+		this(x0, y0, x1, y1);
+		this.color = color;
+	}
 
 	@Override
 	public void accept(Graphics2D g2d) {
