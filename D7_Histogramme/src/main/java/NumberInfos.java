@@ -53,6 +53,10 @@ public class NumberInfos implements Iterable<NumberInfo> {
 	public double getMaxValue() {
 		return infos.stream().mapToDouble(NumberInfo::getValue).max().orElse(0);
 	}
+	
+	public double getTotalValue() {
+		return infos.stream().mapToDouble(NumberInfo::getValue).sum();
+	}
 
 	public void add(double value, String label) {
 		this.add(new NumberInfo(value, label));
