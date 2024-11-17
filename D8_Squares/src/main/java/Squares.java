@@ -12,7 +12,7 @@ public class Squares implements Iterable<Square> {
 		int height = drawPanel.getHeight(), width = drawPanel.getWidth();
 		
 		for (Square square : squares) {
-			g2d.setColor(new Color((int) (square.x/width*255), (int) (square.y/height*255), 0));
+			g2d.setColor(new Color(Math.clamp((int) (square.x/width*255), 0, 255), Math.clamp((int) (square.y/height*255), 0, 255), 0));
 			g2d.fill(square);
 		}
 	}
