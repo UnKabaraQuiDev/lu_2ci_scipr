@@ -21,6 +21,8 @@ public class MainFrame extends javax.swing.JFrame {
      * si la liste est vide ou les données ne sont pas disponibles.
      */
     private void updateView() {
+    	plotFrame.getDrawPanel().repaint();
+    	
     	if(plotFrame.getDrawPanel().getPoly() == null)
     		return;
     	

@@ -12,7 +12,7 @@ public class Polynomial {
 	private double xMin, xMax, yMin, yMax;
 
 	public Polynomial() {
-		setLimits(-10, 10, -10, 10);
+		setLimits(-2, 2, -2, 2);
 	}
 
 	public void draw(DrawPanel panel, Graphics2D g2d) {
@@ -20,8 +20,9 @@ public class Polynomial {
 
 		for (int px = 0; px < panel.getWidth(); px++) {
 
-			double xFac = (xMax - xMin) / panel.getWidth(),
-					yFac = (yMax - yMin) / panel.getHeight();
+			double xFac = (xMax - xMin) / panel.getWidth(), yFac = (yMax - yMin) / panel.getHeight();
+
+			double xGraph = xFac * px;
 
 			double rx = PCUtils.map((double) px, 0, panel.getWidth(), xMin, xMax);
 			int py = (int) PCUtils.map(evaluateNaive(rx), yMin, yMax, panel.getHeight(), 0);
