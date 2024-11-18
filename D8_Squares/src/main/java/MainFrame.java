@@ -100,9 +100,6 @@ public class MainFrame extends JFrame {
 		contentPane.add(panel_1, BorderLayout.CENTER);
 		panel_1.setLayout(new BorderLayout(0, 0));
 
-		JPanel panel_5 = new JPanel();
-		panel_1.add(panel_5, BorderLayout.EAST);
-
 		DrawPanel drawPanel = new DrawPanel(this);
 		panel_1.add(drawPanel, BorderLayout.CENTER);
 		
