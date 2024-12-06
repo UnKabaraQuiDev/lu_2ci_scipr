@@ -1,4 +1,4 @@
-import java.awt.Graphics2D;
+import java.awt.Graphics;
 import java.awt.Point;
 
 public class Line {
@@ -10,7 +10,7 @@ public class Line {
 		this.p2 = p2;
 	}
 
-	public void draw(Graphics2D g2d) {
+	public void draw(Graphics g2d) {
 		g2d.drawLine(p1.x, p1.y, p2.x, p2.y);
 	}
 

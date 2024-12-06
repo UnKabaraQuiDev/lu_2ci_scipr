@@ -18,10 +18,12 @@ public class DrawPanel extends JPanel {
 
 	@Override
 	protected void paintComponent(Graphics g) {
+		super.paintComponent(g);
+		
 		g.setColor(Color.WHITE);
 		g.fillRect(0, 0, getWidth(), getHeight());
 
-		lines.draw((Graphics2D) g);
+		lines.draw(g);
 	}
 
 	public Lines getLines() {

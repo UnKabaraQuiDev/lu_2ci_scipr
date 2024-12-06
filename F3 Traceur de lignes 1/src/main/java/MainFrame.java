@@ -1,5 +1,6 @@
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
+import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
@@ -24,50 +25,34 @@ public class MainFrame extends JFrame {
 		drawPanel = new DrawPanel(lines);
 		getContentPane().add(drawPanel, BorderLayout.CENTER);
 
-		addMouseListener(new MouseAdapter() {
+		drawPanel.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
-				pressedBtn = e.getButton();
-				
-				if (e.getButton() != MouseEvent.BUTTON1) {
-					return;
-				}
-				
-				currentLine = new Line(e.getPoint(), e.getPoint());
-			}
-
-			@Override
-			public void mouseReleased(MouseEvent e) {
-				pressedBtn = e.getButton();
-				
-				if (e.getButton() != MouseEvent.BUTTON1) {
-					return;
-				}
-
-				currentLine.setP2(e.getPoint());
-				lines.add(currentLine);
-				
-				drawPanel.repaint();
+				drawPanelMousePressed(e);
 			}
 		});
 
-		addMouseMotionListener(new MouseMotionAdapter() {
+		drawPanel.addMouseMotionListener(new MouseMotionAdapter() {
 			@Override
 			public void mouseDragged(MouseEvent e) {
-				/*if (pressedBtn != MouseEvent.BUTTON1) {
-					return;
-				}*/
-				
-				currentLine.setP2(e.getPoint());
-				
-				drawPanel.repaint();
-				
+				drawPanelMouseDragged(e);
 			}
 		});
 
 		setVisible(true);
 	}
 
+	private void drawPanelMousePressed(java.awt.event.MouseEvent e) {//GEN-FIRST:event_drawPanelMousePressed
+		currentLine = new Line(e.getPoint(), e.getPoint());
+		lines.add(currentLine);
+    }//GEN-LAST:event_drawPanelMousePressed
+
+    private void drawPanelMouseDragged(java.awt.event.MouseEvent e) {//GEN-FIRST:event_drawPanelMouseDragged
+    	currentLine.setP2(e.getPoint());
+		
+		drawPanel.repaint();
+    }
+	
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
