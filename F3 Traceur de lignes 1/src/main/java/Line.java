@@ -1,8 +1,7 @@
 import java.awt.Graphics2D;
 import java.awt.Point;
-import java.awt.Shape;
 
-public class Line implements Shape {
+public class Line {
 
 	private Point p1, p2;
 
