@@ -37,7 +37,7 @@ public class Rectangle implements CustomShape {
 
 	@Override
 	public String toString() {
-		return color + " (" + p1 + "->" + p2 + ")";
+		return "Rectangle = " + color + " (" + p1 + "->" + p2 + ")";
 	}
 
 	@Override

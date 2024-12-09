@@ -23,7 +23,7 @@ public class MainFrame extends JFrame {
 	private int pressedBtn;
 	private CustomShape currentShape;
 
-	private Shapes lines = new Shapes();
+	private Shapes shapes = new Shapes();
 	private Color color = Color.BLACK;
 
 	private JList list;
@@ -33,14 +33,14 @@ public class MainFrame extends JFrame {
 		setBounds(100, 100, 450, 300);
 
 		getContentPane().setLayout(new GridLayout(1, 2));
-		
+
 		JPanel sidePanel = new JPanel();
 		sidePanel.setLayout(new GridLayout(2, 1));
-		
+
 		list = new JList();
-		
+
 		sidePanel.add(list);
-		
+
 		JButton colorBtn = new JButton("Change color");
 
 		colorBtn.addActionListener(new ActionListener() {
@@ -49,10 +49,10 @@ public class MainFrame extends JFrame {
 				colorDialog();
 			}
 		});
-		
+
 		sidePanel.add(colorBtn);
-		
-		drawPanel = new DrawPanel(lines);
+
+		drawPanel = new DrawPanel(shapes);
 		getContentPane().add(drawPanel, BorderLayout.CENTER);
 
 		drawPanel.addMouseListener(new MouseAdapter() {
@@ -60,7 +60,7 @@ public class MainFrame extends JFrame {
 			public void mousePressed(MouseEvent e) {
 				drawPanelMousePressed(e);
 			}
-			
+
 			@Override
 			public void mouseReleased(MouseEvent e) {
 				drawPanelMouseReleased(e);
@@ -73,7 +73,7 @@ public class MainFrame extends JFrame {
 				drawPanelMouseDragged(e);
 			}
 		});
-		
+
 		getContentPane().add(sidePanel);
 
 		setVisible(true);
@@ -84,29 +84,29 @@ public class MainFrame extends JFrame {
 	}
 
 	private void drawPanelMousePressed(MouseEvent e) {
-		if(e.getButton() == MouseEvent.BUTTON1) {
+		if (e.getButton() == MouseEvent.BUTTON1) {
 			currentShape = new Line(color, e.getPoint(), e.getPoint());
-			lines.add(currentShape);
-		}else if(e.getButton() == MouseEvent.BUTTON3) {
+			shapes.add(currentShape);
+		} else if (e.getButton() == MouseEvent.BUTTON3) {
 			currentShape = new Rectangle(color, e.getPoint(), e.getPoint());
-			lines.add(currentShape);
+			shapes.add(currentShape);
 		}
-		
-		list.setListData(lines.getShapes().toArray());
+
+		list.setListData(shapes.getShapes().toArray());
 	}
-	
+
 	private void drawPanelMouseReleased(MouseEvent e) {
 		currentShape.setEndpoint(e.getPoint());
 
 		drawPanel.repaint();
-		list.setListData(lines.getShapes().toArray());
+		list.setListData(shapes.getShapes().toArray());
 	}
 
 	private void drawPanelMouseDragged(MouseEvent e) {
 		currentShape.setEndpoint(e.getPoint());
 
 		drawPanel.repaint();
-		list.setListData(lines.getShapes().toArray());
+		list.setListData(shapes.getShapes().toArray());
 	}
 
 	public static void main(String[] args) {

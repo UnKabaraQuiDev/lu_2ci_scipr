@@ -36,7 +36,7 @@ public class Line implements CustomShape {
 
 	@Override
 	public String toString() {
-		return color + " (" + p1 + "->" + p2 + ")";
+		return "Line = " + color + " (" + p1 + "->" + p2 + ")";
 	}
 
 	@Override
