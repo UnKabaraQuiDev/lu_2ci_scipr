@@ -1,5 +1,5 @@
 import java.awt.Color;
-import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -9,7 +9,7 @@ public class Lines {
 
 	private List<Line> lines = new ArrayList<>();
 
-	public void draw(Graphics g2d) {
+	public void draw(Graphics2D g2d) {
 		g2d.setColor(Color.BLACK);
 		
 		lines.forEach(l -> l.draw(g2d));

@@ -6,31 +6,31 @@ import javax.swing.JPanel;
 
 public class DrawPanel extends JPanel {
 
-	private Lines lines;
+	private Shapes lines;
 
 	public DrawPanel() {
-		lines = new Lines();
+		lines = new Shapes();
 	}
 
-	public DrawPanel(Lines lines) {
+	public DrawPanel(Shapes lines) {
 		this.lines = lines;
 	}
 
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		
+
 		g.setColor(Color.WHITE);
 		g.fillRect(0, 0, getWidth(), getHeight());
 
-		lines.draw(g);
+		lines.draw((Graphics2D) g);
 	}
 
-	public Lines getLines() {
+	public Shapes getLines() {
 		return lines;
 	}
 
-	public void setLines(Lines lines) {
+	public void setLines(Shapes lines) {
 		this.lines = lines;
 	}
 
