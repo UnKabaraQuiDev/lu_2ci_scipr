@@ -1,7 +1,6 @@
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.EventQueue;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -32,10 +31,10 @@ public class MainFrame extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 
-		getContentPane().setLayout(new GridLayout(1, 2));
+		getContentPane().setLayout(new BorderLayout());
 
 		JPanel sidePanel = new JPanel();
-		sidePanel.setLayout(new GridLayout(2, 1));
+		sidePanel.setLayout(new BorderLayout());
 
 		list = new JList();
 
@@ -50,7 +49,7 @@ public class MainFrame extends JFrame {
 			}
 		});
 
-		sidePanel.add(colorBtn);
+		sidePanel.add(colorBtn, BorderLayout.SOUTH);
 
 		drawPanel = new DrawPanel(shapes);
 		getContentPane().add(drawPanel, BorderLayout.CENTER);
@@ -74,7 +73,7 @@ public class MainFrame extends JFrame {
 			}
 		});
 
-		getContentPane().add(sidePanel);
+		getContentPane().add(sidePanel, BorderLayout.EAST);
 
 		setVisible(true);
 	}
