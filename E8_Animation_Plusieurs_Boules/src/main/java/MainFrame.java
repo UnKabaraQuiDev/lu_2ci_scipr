@@ -1,15 +1,21 @@
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import org.joml.Math;
+
+import lu.pcy113.pclib.PCUtils;
+
 public class MainFrame extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	
+
 	private DrawPanel drawPanel;
 
 	public MainFrame() {
@@ -18,17 +24,29 @@ public class MainFrame extends JFrame {
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout());
-		
-		super.setExtendedState(JFrame.MAXIMIZED_BOTH); 
+
+		super.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		super.setVisible(true);
-		
+
 		drawPanel = new DrawPanel(this);
-		
+
+		drawPanel.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				drawPanel.speed = DrawPanel.DEFAULT_SPEED * 0.3;
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				drawPanel.speed = DrawPanel.DEFAULT_SPEED;
+			}
+		});
+
 		contentPane.add(drawPanel);
 
 		setContentPane(contentPane);
 	}
-	
+
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
