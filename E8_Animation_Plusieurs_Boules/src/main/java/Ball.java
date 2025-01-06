@@ -7,14 +7,14 @@ import org.joml.Vector2d;
 
 import lu.pcy113.pclib.PCUtils;
 
-public class Circle {
+public class Ball {
 
 	private Vector2d center;
 	private Vector2d velocity;
 	private int radius;
 	private Color color;
 
-	public Circle(Vector2d center, Vector2d velocity, double speed, int radius, Color color) {
+	public Ball(Vector2d center, Vector2d velocity, double speed, int radius, Color color) {
 		this.center = center;
 		this.velocity = velocity.normalize().mul(speed);
 		this.radius = radius;
@@ -41,8 +41,8 @@ public class Circle {
 		}
 	}
 
-	public void draw(Graphics2D g2d, JPanel parent) {
-		g2d.setColor(new Color((int) PCUtils.clamp(0, 255, center.x / parent.getWidth() * 255), (int) PCUtils.clamp(0, 255, center.y / parent.getHeight() * 255), 0));
+	public void draw(Graphics2D g2d, Vector2d viewportSize) {
+		g2d.setColor(new Color((int) PCUtils.clamp(0, 255, center.x / viewportSize.x * 255), (int) PCUtils.clamp(0, 255, center.y / viewportSize.y * 255), 0));
 		g2d.drawOval((int) (center.x - radius), (int) (center.y - radius), (int) (radius * 2), (int) (radius * 2));
 	}
 

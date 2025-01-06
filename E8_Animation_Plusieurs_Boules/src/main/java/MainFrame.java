@@ -7,10 +7,6 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import org.joml.Math;
-
-import lu.pcy113.pclib.PCUtils;
-
 public class MainFrame extends JFrame {
 
 	private static final long serialVersionUID = 1L;
@@ -28,17 +24,22 @@ public class MainFrame extends JFrame {
 		super.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		super.setVisible(true);
 
-		drawPanel = new DrawPanel(this);
+		drawPanel = new DrawPanel(this, new Balls());
 
 		drawPanel.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
-				drawPanel.speed = DrawPanel.DEFAULT_SPEED * 0.3;
+				if(e.getButton() == MouseEvent.BUTTON2) {
+				drawPanel.getBalls().addBall();
+					return;
+				}
+				
+				drawPanel.getBalls().setSpeed(Balls.DEFAULT_SPEED * 0.3);
 			}
 
 			@Override
 			public void mouseReleased(MouseEvent e) {
-				drawPanel.speed = DrawPanel.DEFAULT_SPEED;
+				drawPanel.getBalls().setSpeed(Balls.DEFAULT_SPEED);
 			}
 		});
 

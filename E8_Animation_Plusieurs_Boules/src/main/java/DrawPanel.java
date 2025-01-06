@@ -1,36 +1,26 @@
 import java.awt.BasicStroke;
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Polygon;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
 import org.joml.Vector2d;
 
-import lu.pcy113.pclib.PCUtils;
-
 public class DrawPanel extends JPanel {
 
-	protected static final double DEFAULT_SPEED = 2;
+	public static int FPS = 120;
+	public static double SIMULATION_SPEED = 1;
 
 	private Timer timer;
 
-	private List<Circle> circles = new ArrayList<>();
+	private Balls balls;
 
-	public double speed = DEFAULT_SPEED;
+	public DrawPanel(MainFrame mainFrame, Balls balls2) {
+		this.balls = balls2;
 
-	public DrawPanel(MainFrame mainFrame) {
-		for (int i = 0; i < 50; i++) {
-			circles.add(new Circle(new Vector2d(PCUtils.randomIntRange(0, 200), PCUtils.randomIntRange(0, 200)), new Vector2d(PCUtils.randomDoubleRange(10, 300), PCUtils.randomDoubleRange(10, 300)),
-					300, PCUtils.randomIntRange(10, 50), PCUtils.randomColor(false)));
-		}
-
-		timer = new Timer(1000 / 120, e -> {
-			circles.forEach(circle -> circle.fixedUpdate((double) 1 / 120 * speed, new Vector2d(getWidth(), getHeight())));
+		timer = new Timer(1000 / FPS, e -> {
+			balls.fixedUpdate((double) 1 / FPS * SIMULATION_SPEED, new Vector2d(getWidth(), getHeight()));
 			repaint();
 		});
 
@@ -42,14 +32,13 @@ public class DrawPanel extends JPanel {
 		((Graphics2D) g).setStroke(new BasicStroke(2));
 
 		super.paintComponent(g);
-		circles.forEach(circle -> circle.draw((Graphics2D) g, this));
+		balls.drawBalls((Graphics2D) g, new Vector2d(getWidth(), getHeight()));
 
-		Polygon poly = new Polygon();
+		balls.drawLine((Graphics2D) g);
+	}
 
-		circles.forEach(circle -> poly.addPoint((int) circle.getCenter().x, (int) circle.getCenter().y));
-
-		// g.setColor(Color.RED);
-		((Graphics2D) g).draw(poly);
+	public Balls getBalls() {
+		return balls;
 	}
 
 }
