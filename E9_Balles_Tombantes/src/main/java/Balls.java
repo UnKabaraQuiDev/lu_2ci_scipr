@@ -53,6 +53,10 @@ public class Balls {
 		this.speed = speed;
 	}
 
+	public void clear() {
+		balls.clear();
+	}
+
 	public void addBall() {
 		balls.add(new Ball(
 				new Vector2d(PCUtils.randomIntRange(0, 1000), PCUtils.randomIntRange(0, 20)),

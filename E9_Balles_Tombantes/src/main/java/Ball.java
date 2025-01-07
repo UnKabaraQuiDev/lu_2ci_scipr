@@ -8,7 +8,7 @@ import lu.pcy113.pclib.PCUtils;
 public class Ball {
 
 	private static final Vector2d DOWN_FORCE = new Vector2d(0, 100); // px/s^2
-	private static final double FRICTION = 0.8;
+	private static final double FRICTION = PCUtils.randomDoubleRange(0.65, 0.8);
 
 	// doesn't apply gravity
 	private boolean fixed = true;
@@ -55,8 +55,15 @@ public class Ball {
 	}
 
 	public void draw(Graphics2D g2d, Vector2d viewportSize) {
-		g2d.setColor(new Color((int) PCUtils.clamp(0, 255, center.x / viewportSize.x * 255), (int) PCUtils.clamp(0, 255, center.y / viewportSize.y * 255), 0));
-		g2d.fillOval((int) (center.x - radius), (int) (center.y - radius), (int) (radius * 2), (int) (radius * 2));
+		Color initialColor = new Color((int) PCUtils.clamp(0, 255, center.x / viewportSize.x * 255), (int) PCUtils.clamp(0, 255, center.y / viewportSize.y * 255), 0);
+
+		final int LAYER_COUNT = 5;
+		for (int layer = LAYER_COUNT; layer > 0; layer--) {
+			int radius = this.radius / LAYER_COUNT* layer ;
+			g2d.setColor(initialColor);
+			g2d.fillOval((int) (center.x - radius), (int) (center.y - radius), (int) (radius * 2), (int) (radius * 2));
+			initialColor = initialColor.brighter();
+		}
 	}
 
 	public Vector2d getCenter() {

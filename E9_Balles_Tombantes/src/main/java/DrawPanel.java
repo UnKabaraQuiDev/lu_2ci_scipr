@@ -12,21 +12,21 @@ public class DrawPanel extends JPanel {
 	public static int FPS = 120;
 	public static double SIMULATION_SPEED = 1;
 
-	private Timer timer;
+	public Timer timerMove, timerDrop;
 
 	private Balls balls;
 
 	public DrawPanel(MainFrame mainFrame, Balls balls2) {
 		this.balls = balls2;
 
-		timer = new Timer(1000 / FPS, e -> {
-			balls.getBalls().forEach(b -> b.setFixed(!(b.isFixed() && Math.random() < 0.001)));
-			
+		timerMove = new Timer(1000 / FPS, e -> {
 			balls.fixedUpdate((double) 1 / FPS * SIMULATION_SPEED, new Vector2d(getWidth(), getHeight()));
 			repaint();
 		});
 
-		timer.start();
+		timerDrop = new Timer(90, e -> {
+			balls.getBalls().stream().filter(b -> b.isFixed()).findFirst().ifPresent(b -> b.setFixed(false));
+		});
 	}
 
 	@Override
