@@ -1,12 +1,18 @@
 
 import java.awt.Graphics2D;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
 
 import javax.swing.JPanel;
 
 import lu.pcy113.pclib.PCUtils;
 import lu.pcy113.pclib.builder.ThreadBuilder;
+import lu.pcy113.pclib.impl.ExceptionSupplier;
 
 public class Balls {
 
@@ -57,26 +63,121 @@ public class Balls {
 		return balls.parallelStream().filter(b -> b.isInside(x, y)).findFirst().orElse(null);
 	}
 
+	private List<ScoreEntries> entries = new ArrayList<>();
+	private PrintStream printer = System.out;
+
 	public void determineNumberOfNeighbors() {
-		// we do -1 because the Ball touches itself
-		// probably the least optimised way to do it...
+		entries.clear();
 
-		//@formatter:off
-		// 8_500 ms @ 100_000 balls
-		//System.out.println("Parallel thread naive: ");
-		//System.out.println((double) PCUtils.nanoTime(() -> balls.parallelStream().forEach(b -> b.setNeighborCount((int) (balls.stream().filter(b2 -> b.isTouching(b2)).count() - 1)))) / 1_000_000 + " ms");
-		//@formatter:on
-		
-		//@formatter:off
-		// 40_000 ms @ 100_000 balls
-		//System.out.println("Single thread naive: ");
-		//System.out.println((double) PCUtils.nanoTime(() -> balls.stream().forEach(b -> b.setNeighborCount((int) (balls.stream().filter(b2 -> b.isTouching(b2)).count() - 1)))) / 1_000_000 + " ms");
-		//@formatter:on
+		Timer timer;
 
+		timer = startInterruptTimer(10, TimeUnit.MINUTES, this::_singleThreadFor, "Single Thread For");
+
+		timer = startInterruptTimer(10, TimeUnit.MINUTES, this::_multiThreadFor, "Multi Thread For");
+
+		timer = startInterruptTimer(10, TimeUnit.MINUTES, this::_singleThreadStream, "Single Thread Stream");
+
+		timer = startInterruptTimer(10, TimeUnit.MINUTES, this::_parallelThreadStream, "Parallel Thread Stream");
+
+		timer = startInterruptTimer(10, TimeUnit.MINUTES, this::_nestedParallelThreadStream, "Nested Parallel Thread Stream");
+
+		timer = startInterruptTimer(10, TimeUnit.MINUTES, this::_singleThreadQuad, "Single Thread Quad");
+
+		timer = startInterruptTimer(10, TimeUnit.MINUTES, this::_multiThreadQuad, "Multi Thread Quad");
+
+		printer.println(PCUtils.repeatString("\n", 2));
+		printer.println("Scoreboard:");
+		entries.stream().sorted((a, b) -> a.time > b.time ? 1 : -1).forEach(s -> printer.println(s.name + " | " + s.count + " | " + ((double) s.time / 1_000_000) + "ms"));
+	}
+
+	private Timer startInterruptTimer(long delay, TimeUnit unit, ExceptionSupplier<Long> run, String type) {
+		final Thread thread = Thread.currentThread();
+
+		final long msDelay = TimeUnit.MILLISECONDS.convert(delay, unit);
+
+		Timer timer = new Timer("Interrupt: " + delay + unit.name());
+		timer.schedule(new TimerTask() {
+			@Override
+			public void run() {
+				thread.interrupt();
+			}
+		}, msDelay);
+
+		try {
+			final long elapsedTimeNs = run.get();
+			printer.println(type + " @ " + balls.size() + " | " + ((double) elapsedTimeNs / 1_000_000) + "ms");
+
+			entries.add(new ScoreEntries(elapsedTimeNs, type, balls.size()));
+		} catch (InterruptedException e) {
+			printer.println(type + " @ " + balls.size() + " | " + "stopped");
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			timer.cancel();
+		}
+
+		return timer;
+	}
+
+	private long _singleThreadFor() throws InterruptedException {
 		//@formatter:off
-		// 6_000 ms @ 100_000 balls
-		System.out.println("Single thread quad: ");
-		System.out.println((double) PCUtils.nanoTime(() -> {
+		return PCUtils.nanoTime(() -> {
+			for(Ball b : balls) {
+				int neighborCount = 0;
+				
+				for(Ball b2 : balls) {
+					if(b.isTouching(b2)) {
+						neighborCount++;
+					}
+				}
+				
+				b.setNeighborCount(neighborCount - 1);
+			}
+		});
+		//@formatter:on
+	}
+
+	private long _multiThreadFor() throws InterruptedException {
+		//@formatter:off
+		return PCUtils.nanoTime(() -> {
+			for(Ball b : balls) {
+				ThreadBuilder.create(() -> {
+					int neighborCount = 0;
+					
+					for(Ball b2 : balls) {
+						if(b.isTouching(b2)) {
+							neighborCount++;
+						}
+					}
+					
+					b.setNeighborCount(neighborCount - 1);
+				}).start();
+			}
+		});
+		//@formatter:on
+	}
+
+	private long _singleThreadStream() throws InterruptedException {
+		//@formatter:off
+		return PCUtils.nanoTime(() -> balls.stream().forEach(b -> b.setNeighborCount((int) (balls.stream().filter(b2 -> b.isTouching(b2)).count() - 1))));
+		//@formatter:on
+	}
+
+	private long _parallelThreadStream() throws InterruptedException {
+		//@formatter:off
+		return PCUtils.nanoTime(() -> balls.parallelStream().forEach(b -> b.setNeighborCount((int) (balls.stream().filter(b2 -> b.isTouching(b2)).count() - 1))));
+		//@formatter:on
+	}
+
+	private long _nestedParallelThreadStream() throws InterruptedException {
+		//@formatter:off
+		return PCUtils.nanoTime(() -> balls.parallelStream().forEach(b -> b.setNeighborCount((int) (balls.parallelStream().filter(b2 -> b.isTouching(b2)).count() - 1))));
+		//@formatter:on
+	}
+
+	private long _singleThreadQuad() throws InterruptedException {
+		//@formatter:off
+		return PCUtils.nanoTime(() -> {
 			for(int ix = 0; ix < quad.length; ix++) {
 				ArrayList<Ball>[] xQuad = quad[ix];
 				for(int iy = 0; iy < xQuad.length; iy++) {
@@ -107,13 +208,13 @@ public class Balls {
 					}
 				}
 			}
-		}) / 1_000_000 + " ms");
+		});
 		//@formatter:on
-		
+	}
+
+	private long _multiThreadQuad() throws InterruptedException {
 		//@formatter:off
-		// 833 ms @ 100_000 balls
-		System.out.println("Multi thread quad: ");
-		System.out.println((double) PCUtils.nanoTime(() -> {
+		return PCUtils.nanoTime(() -> {
 			for(int ix = 0; ix < quad.length; ix++) {
 				ArrayList<Ball>[] xQuad = quad[ix];
 				for(int iy = 0; iy < xQuad.length; iy++) {
@@ -148,8 +249,11 @@ public class Balls {
 					}).start();
 				}
 			}
-		}) / 1_000_000 + " ms");
+		});
 		//@formatter:on
+	}
+
+	public record ScoreEntries(long time, String name, int count) {
 	}
 
 }

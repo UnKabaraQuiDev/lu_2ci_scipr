@@ -1,0 +1,93 @@
+Sample count ---------------- 10000: ok
+Single Thread For @ 10000 | 587.657644ms
+Multi Thread For @ 10000 | 417.778722ms
+Single Thread Stream @ 10000 | 303.248699ms
+Parallel Thread Stream @ 10000 | 74.189719ms
+Nested Parallel Thread Stream @ 10000 | 210.010932ms
+Single Thread Quad @ 10000 | 95.179796ms
+Multi Thread Quad @ 10000 | 71.08792ms
+
+
+
+Scoreboard:
+Multi Thread Quad | 10000 | 71.08792ms
+Parallel Thread Stream | 10000 | 74.189719ms
+Single Thread Quad | 10000 | 95.179796ms
+Nested Parallel Thread Stream | 10000 | 210.010932ms
+Single Thread Stream | 10000 | 303.248699ms
+Multi Thread For | 10000 | 417.778722ms
+Single Thread For | 10000 | 587.657644ms
+
+
+
+
+Sample count ---------------- 50000: ok
+Single Thread For @ 50000 | 13563.46384ms
+Multi Thread For @ 50000 | 2062.830836ms
+Single Thread Stream @ 50000 | 16757.336593ms
+Parallel Thread Stream @ 50000 | 2103.584209ms
+Nested Parallel Thread Stream @ 50000 | 2313.741533ms
+Single Thread Quad @ 50000 | 1450.181322ms
+Multi Thread Quad @ 50000 | 119.529812ms
+
+
+
+Scoreboard:
+Multi Thread Quad | 50000 | 119.529812ms
+Single Thread Quad | 50000 | 1450.181322ms
+Multi Thread For | 50000 | 2062.830836ms
+Parallel Thread Stream | 50000 | 2103.584209ms
+Nested Parallel Thread Stream | 50000 | 2313.741533ms
+Single Thread For | 50000 | 13563.46384ms
+Single Thread Stream | 50000 | 16757.336593ms
+
+
+
+
+Sample count ---------------- 100000: ok
+Single Thread For @ 100000 | 27133.027894ms
+Multi Thread For @ 100000 | 5304.937837ms
+Single Thread Stream @ 100000 | 79653.382114ms
+Parallel Thread Stream @ 100000 | 9038.143993ms
+Nested Parallel Thread Stream @ 100000 | 9302.362481ms
+Single Thread Quad @ 100000 | 3919.042573ms
+Multi Thread Quad @ 100000 | 375.498918ms
+
+
+
+Scoreboard:
+Multi Thread Quad | 100000 | 375.498918ms
+Single Thread Quad | 100000 | 3919.042573ms
+Multi Thread For | 100000 | 5304.937837ms
+Parallel Thread Stream | 100000 | 9038.143993ms
+Nested Parallel Thread Stream | 100000 | 9302.362481ms
+Single Thread For | 100000 | 27133.027894ms
+Single Thread Stream | 100000 | 79653.382114ms
+
+
+
+
+Sample count ---------------- 250000: ok
+Single Thread For @ 250000 | 729320.893753ms
+Multi Thread For @ 250000 | 50613.916909ms
+Single Thread Stream @ 250000 | 829660.357924ms
+Parallel Thread Stream @ 250000 | 88940.249196ms
+Nested Parallel Thread Stream @ 250000 | 102936.669455ms
+Single Thread Quad @ 250000 | 25179.133658ms
+Multi Thread Quad @ 250000 | 779.542548ms
+
+
+
+Scoreboard:
+Multi Thread Quad | 250000 | 779.542548ms
+Single Thread Quad | 250000 | 25179.133658ms
+Multi Thread For | 250000 | 50613.916909ms
+Parallel Thread Stream | 250000 | 88940.249196ms
+Nested Parallel Thread Stream | 250000 | 102936.669455ms
+Single Thread For | 250000 | 729320.893753ms
+Single Thread Stream | 250000 | 829660.357924ms
+
+
+
+
+Sample count ---------------- 500000: ok

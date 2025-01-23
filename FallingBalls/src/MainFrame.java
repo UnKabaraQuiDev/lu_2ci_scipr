@@ -2,6 +2,8 @@
 import java.awt.Color;
 import java.util.Random;
 
+import lu.pcy113.pclib.PCUtils;
+
 public class MainFrame extends javax.swing.JFrame {
 
 	private Balls balls;
@@ -40,7 +42,7 @@ public class MainFrame extends javax.swing.JFrame {
 		drawPanel1.setBalls(balls);
 		drawPanel1.setBackground(Color.GRAY);
 
-		final int[] samples = new int[] { /* 100_000, 500_000, */ 1_000_000 };
+		final int[] samples = new int[] { 500_000, 1_000_000 };
 		for (int j = 0; j < samples.length; j++) {
 			final int sample = samples[j];
 
@@ -57,8 +59,16 @@ public class MainFrame extends javax.swing.JFrame {
 			balls = new Balls(drawPanel1);
 			drawPanel1.setBalls(balls);
 			System.gc();
+			
+			System.out.println(PCUtils.repeatString("\n", 3));
 		}
 
+		try {
+			Thread.sleep(1_000); // buffer for timer
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		
 		System.exit(12);
 	}
 
