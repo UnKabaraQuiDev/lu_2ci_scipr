@@ -42,7 +42,7 @@ public class MainFrame extends javax.swing.JFrame {
 		drawPanel1.setBalls(balls);
 		drawPanel1.setBackground(Color.GRAY);
 
-		final int[] samples = new int[] { 500_000, 1_000_000 };
+		final int[] samples = new int[] { 500, 1_000, 2_500, 5_000, 10_000, 25_000, 50_000, 100_000, 250_000, 500_000, 1_000_000 };
 		for (int j = 0; j < samples.length; j++) {
 			final int sample = samples[j];
 
@@ -61,6 +61,11 @@ public class MainFrame extends javax.swing.JFrame {
 			System.gc();
 			
 			System.out.println(PCUtils.repeatString("\n", 3));
+		}
+		
+		System.out.println("time,type,count");
+		for(Balls.ScoreEntries se : Balls.reg) {
+			System.out.println(se.time + "," + se.name + "," + se.count);
 		}
 
 		try {

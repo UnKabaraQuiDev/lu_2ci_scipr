@@ -3,10 +3,14 @@ import java.awt.Graphics2D;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.Set;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import javax.swing.JPanel;
 
@@ -63,60 +67,67 @@ public class Balls {
 		return balls.parallelStream().filter(b -> b.isInside(x, y)).findFirst().orElse(null);
 	}
 
-	private List<ScoreEntries> entries = new ArrayList<>();
+	public List<ScoreEntries> entries = new ArrayList<>();
+	public static List<ScoreEntries> reg = new ArrayList<>();
+	public static Set<String> failed = new HashSet<>();
 	private PrintStream printer = System.out;
 
 	public void determineNumberOfNeighbors() {
 		entries.clear();
 
-		Timer timer;
+		final int TIMEOUT = 8;
 
-		timer = startInterruptTimer(10, TimeUnit.MINUTES, this::_singleThreadFor, "Single Thread For");
+		startInterruptTimer(TIMEOUT, TimeUnit.MINUTES, this::_singleThreadFor, "Single Thread For");
 
-		timer = startInterruptTimer(10, TimeUnit.MINUTES, this::_multiThreadFor, "Multi Thread For");
+		startInterruptTimer(TIMEOUT, TimeUnit.MINUTES, this::_multiThreadFor, "Multi Thread For");
 
-		timer = startInterruptTimer(10, TimeUnit.MINUTES, this::_singleThreadStream, "Single Thread Stream");
+		startInterruptTimer(TIMEOUT, TimeUnit.MINUTES, this::_singleThreadStream, "Single Thread Stream");
 
-		timer = startInterruptTimer(10, TimeUnit.MINUTES, this::_parallelThreadStream, "Parallel Thread Stream");
+		startInterruptTimer(TIMEOUT, TimeUnit.MINUTES, this::_parallelThreadStream, "Parallel Thread Stream");
 
-		timer = startInterruptTimer(10, TimeUnit.MINUTES, this::_nestedParallelThreadStream, "Nested Parallel Thread Stream");
+		startInterruptTimer(TIMEOUT, TimeUnit.MINUTES, this::_nestedParallelThreadStream, "Nested Parallel Thread Stream");
 
-		timer = startInterruptTimer(10, TimeUnit.MINUTES, this::_singleThreadQuad, "Single Thread Quad");
+		startInterruptTimer(TIMEOUT, TimeUnit.MINUTES, this::_singleThreadQuad, "Single Thread Quad");
 
-		timer = startInterruptTimer(10, TimeUnit.MINUTES, this::_multiThreadQuad, "Multi Thread Quad");
+		startInterruptTimer(TIMEOUT, TimeUnit.MINUTES, this::_multiThreadQuad, "Multi Thread Quad");
 
 		printer.println(PCUtils.repeatString("\n", 2));
 		printer.println("Scoreboard:");
 		entries.stream().sorted((a, b) -> a.time > b.time ? 1 : -1).forEach(s -> printer.println(s.name + " | " + s.count + " | " + ((double) s.time / 1_000_000) + "ms"));
+
+		reg.addAll(entries);
 	}
 
-	private Timer startInterruptTimer(long delay, TimeUnit unit, ExceptionSupplier<Long> run, String type) {
-		final Thread thread = Thread.currentThread();
+	private ExecutorService startInterruptTimer(long delay, TimeUnit unit, ExceptionSupplier<Long> run, String type) {
+		if(failed.contains(type)) {
+			printer.println(type + " @ " + balls.size() + " | " + "skipped");
+			entries.add(new ScoreEntries(-1, type, balls.size()));
+			
+			return null;
+		}
+		
+		final ExecutorService executor = Executors.newSingleThreadExecutor();
 
-		final long msDelay = TimeUnit.MILLISECONDS.convert(delay, unit);
-
-		Timer timer = new Timer("Interrupt: " + delay + unit.name());
-		timer.schedule(new TimerTask() {
-			@Override
-			public void run() {
-				thread.interrupt();
-			}
-		}, msDelay);
+		final Future<Long> future = executor.submit(() -> run.get());
 
 		try {
-			final long elapsedTimeNs = run.get();
+			final long elapsedTimeNs = future.get(delay, unit);
+
 			printer.println(type + " @ " + balls.size() + " | " + ((double) elapsedTimeNs / 1_000_000) + "ms");
 
 			entries.add(new ScoreEntries(elapsedTimeNs, type, balls.size()));
-		} catch (InterruptedException e) {
+		} catch (TimeoutException e) {
+			future.cancel(true);
 			printer.println(type + " @ " + balls.size() + " | " + "stopped");
+			entries.add(new ScoreEntries(-1, type, balls.size()));
+			failed.add(type);
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			timer.cancel();
+			executor.shutdown();
 		}
 
-		return timer;
+		return executor;
 	}
 
 	private long _singleThreadFor() throws InterruptedException {
@@ -253,7 +264,18 @@ public class Balls {
 		//@formatter:on
 	}
 
-	public record ScoreEntries(long time, String name, int count) {
+	public static class ScoreEntries {
+		public long time;
+		public String name;
+		public int count;
+
+		public ScoreEntries(long time, String name, int count) {
+			super();
+			this.time = time;
+			this.name = name;
+			this.count = count;
+		}
+
 	}
 
 }
