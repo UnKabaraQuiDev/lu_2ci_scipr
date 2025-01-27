@@ -1,6 +1,5 @@
 
 import java.awt.Graphics2D;
-import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -70,7 +69,6 @@ public class Balls {
 	public List<ScoreEntries> entries = new ArrayList<>();
 	public static List<ScoreEntries> reg = new ArrayList<>();
 	public static Set<String> failed = new HashSet<>();
-	private PrintStream printer = System.out;
 
 	public void determineNumberOfNeighbors() {
 		entries.clear();
@@ -91,16 +89,16 @@ public class Balls {
 
 		startInterruptTimer(TIMEOUT, TimeUnit.MINUTES, this::_multiThreadQuad, "Multi Thread Quad");
 
-		printer.println(PCUtils.repeatString("\n", 2));
-		printer.println("Scoreboard:");
-		entries.stream().sorted((a, b) -> a.time > b.time ? 1 : -1).forEach(s -> printer.println(s.name + " | " + s.count + " | " + ((double) s.time / 1_000_000) + "ms"));
+		System.out.println(PCUtils.repeatString("\n", 2));
+		System.out.println("Scoreboard:");
+		entries.stream().sorted((a, b) -> a.time > b.time ? 1 : -1).forEach(s -> System.out.println(s.name + " | " + s.count + " | " + ((double) s.time / 1_000_000) + "ms"));
 
 		reg.addAll(entries);
 	}
 
 	private ExecutorService startInterruptTimer(long delay, TimeUnit unit, ExceptionSupplier<Long> run, String type) {
 		if(failed.contains(type)) {
-			printer.println(type + " @ " + balls.size() + " | " + "skipped");
+			System.out.println(type + " @ " + balls.size() + " | " + "skipped");
 			entries.add(new ScoreEntries(-1, type, balls.size()));
 			
 			return null;
@@ -113,12 +111,12 @@ public class Balls {
 		try {
 			final long elapsedTimeNs = future.get(delay, unit);
 
-			printer.println(type + " @ " + balls.size() + " | " + ((double) elapsedTimeNs / 1_000_000) + "ms");
+			System.out.println(type + " @ " + balls.size() + " | " + ((double) elapsedTimeNs / 1_000_000) + "ms");
 
 			entries.add(new ScoreEntries(elapsedTimeNs, type, balls.size()));
 		} catch (TimeoutException e) {
 			future.cancel(true);
-			printer.println(type + " @ " + balls.size() + " | " + "stopped");
+			System.out.println(type + " @ " + balls.size() + " | " + "stopped");
 			entries.add(new ScoreEntries(-1, type, balls.size()));
 			failed.add(type);
 		} catch (Exception e) {

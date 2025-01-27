@@ -8,35 +8,6 @@ public class MainFrame extends javax.swing.JFrame {
 
 	private Balls balls;
 
-	/**
-	 * Sample count ---------------- 100000<br>
-	 * Parallel thread naive: <br>
-	 * 8084.749834 ms<br>
-	 * Single thread naive:<br>
-	 * 82409.010667 ms<br>
-	 * Single thread quad:<br>
-	 * 6629.24473 ms<br>
-	 * Multi thread quad:<br>
-	 * 843.999205 ms<br>
-	 * Sample count ---------------- 500000<br>
-	 * Parallel thread naive: <br>
-	 * 296644.488333 ms<br>
-	 * Single thread naive:<br>
-	 * idk ms <br>
-	 * Single thread quad: <br>
-	 * 154142.343139 ms<br>
-	 * Multi thread quad: <br>
-	 * 1073.079299 ms<br>
-	 * Sample count ---------------- 1000000<br>
-	 * Parallel thread naive: <br>
-	 * idk ms<br>
-	 * Single thread naive:<br>
-	 * idk ms <br>
-	 * Single thread quad: <br>
-	 * 652809.953922 ms<br>
-	 * Multi thread quad: <br>
-	 * 1223.707564 ms<br>
-	 */
 	public MainFrame() {
 		initComponents();
 		drawPanel1.setBalls(balls);
