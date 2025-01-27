@@ -40,9 +40,9 @@ public class AnalogWatch implements BiConsumer<JPanel, Graphics2D> {
 		final int minutes = currentTime.getMinute();
 		final int seconds = currentTime.getSecond();
 
-		final double secAngle = seconds * 6.0;
-		final double minAngle = (minutes + seconds / 60.0) * 6.0;
-		final double hourAngle = (hours + minutes / 60.0 + seconds / 3600.0) * 30.0;
+		final double secAngle = seconds * 6.0 - 90;
+		final double minAngle = (minutes + seconds / 60.0) * 6.0 - 90;
+		final double hourAngle = (hours + minutes / 60.0 + seconds / 3600.0) * 30.0 - 90;
 
 		g2d.setColor(Color.RED);
 		g2d.draw(rotateLine(new Line2D.Double(0, 0, halfMinSize - LENGTH, 0), Math.toRadians(secAngle)));
