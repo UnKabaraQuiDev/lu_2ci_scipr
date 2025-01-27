@@ -27,7 +27,7 @@ public class AnalogWatch implements BiConsumer<JPanel, Graphics2D> {
 		g2d.setStroke(new BasicStroke(2));
 		g2d.setColor(Color.BLUE);
 		g2d.draw(circle);
-
+		
 		final int STEP_COUNT = 60, LENGTH = 10;
 		for (int i = 0; i < STEP_COUNT; i++) {
 			g2d.drawLine((int) halfMinSize, 0, (int) (halfMinSize - (i % 5 == 0 ? 2 : 1) * LENGTH), 0);
