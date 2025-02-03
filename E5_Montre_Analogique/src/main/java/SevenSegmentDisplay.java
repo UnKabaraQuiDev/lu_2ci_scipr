@@ -25,4 +25,6 @@ public class SevenSegmentDisplay extends JPanel {
 	};
 	//@formatter:on
 	
+	
+	
 }
