@@ -18,13 +18,13 @@ public class MainFrame extends javax.swing.JFrame {
 	}
 
 	private void linearButton1ActionPerformed(java.awt.event.ActionEvent evt) {
-		long startTime = System.nanoTime();
 		List<Long> testNumbers = new ArrayList<>();
 
-		for (int i = 0; i < 10000; i++) {
+		for (int i = 0; i < (int) searchCountSpinner.getValue(); i++) {
 			testNumbers.add(PCUtils.randomLongRange((long) (int) minSpinner.getValue(), (long) (int) maxSpinner.getValue()));
 		}
-
+		
+		long startTime = System.nanoTime();
 		for (long num : testNumbers) {
 			randomNumbers.linearSearch(num);
 		}
@@ -33,13 +33,13 @@ public class MainFrame extends javax.swing.JFrame {
 	}
 
 	private void binaryButtonActionPerformed(ActionEvent evt) {
-		long startTime = System.nanoTime();
 		List<Long> testNumbers = new ArrayList<>();
 
-		for (int i = 0; i < 10000; i++) {
+		for (int i = 0; i < (int) searchCountSpinner.getValue(); i++) {
 			testNumbers.add(PCUtils.randomLongRange((long) (int) minSpinner.getValue(), (long) (int) maxSpinner.getValue()));
 		}
-
+		
+		long startTime = System.nanoTime();
 		for (long num : testNumbers) {
 			randomNumbers.binarySearch(num);
 		}
@@ -103,7 +103,7 @@ public class MainFrame extends javax.swing.JFrame {
 	private javax.swing.JSpinner maxSpinner;
 	private javax.swing.JSpinner minSpinner;
 	private javax.swing.JSpinner nSpinner;
-	private javax.swing.JSpinner searchMeSpinner;
+	private javax.swing.JSpinner searchCountSpinner;
 	// End of variables declaration//GEN-END:variables
 
 	@SuppressWarnings("unchecked")
@@ -126,7 +126,7 @@ public class MainFrame extends javax.swing.JFrame {
 		linearButton1 = new javax.swing.JButton();
 		binaryTime = new javax.swing.JLabel();
 		linearTime = new javax.swing.JLabel();
-		searchMeSpinner = new javax.swing.JSpinner();
+		searchCountSpinner = new javax.swing.JSpinner();
 
 		setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -183,7 +183,7 @@ public class MainFrame extends javax.swing.JFrame {
 						.addComponent(binaryButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 						.addComponent(linearButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 						.addComponent(binaryTime, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-						.addComponent(linearTime, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).addComponent(searchMeSpinner))
+						.addComponent(linearTime, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).addComponent(searchCountSpinner))
 				.addContainerGap()));
 		layout.setVerticalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(layout.createSequentialGroup().addContainerGap().addGroup(layout
 				.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(layout.createSequentialGroup().addComponent(jScrollPane1).addContainerGap())
@@ -197,7 +197,7 @@ public class MainFrame extends javax.swing.JFrame {
 						.addComponent(nSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
 						.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(createButton)
 						.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 24, Short.MAX_VALUE)
-						.addComponent(searchMeSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+						.addComponent(searchCountSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
 						.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
 						.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(linearButton1).addGap(3, 3, 3)
 						.addComponent(linearTime, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
