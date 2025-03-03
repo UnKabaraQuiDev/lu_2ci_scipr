@@ -2,7 +2,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Point;
 
-public class Line implements CustomShape {
+public class Line extends CustomShape {
 
 	private Color color;
 	private Point p1, p2;

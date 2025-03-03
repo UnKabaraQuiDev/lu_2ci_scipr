@@ -1,12 +1,12 @@
 import java.awt.Graphics2D;
 import java.awt.Point;
 
-public interface CustomShape {
+public abstract class CustomShape {
 
-	void setStartpoint(Point p1);
+	public abstract void setStartpoint(Point p1);
 
-	void setEndpoint(Point p2);
+	public abstract void setEndpoint(Point p2);
 
-	void draw(Graphics2D g2d);
+	public abstract void draw(Graphics2D g2d);
 
 }
