@@ -4,7 +4,7 @@
 
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>lu.kbra</groupId>
-	<artifactId>E7_Animation_Simple</artifactId>
+	<artifactId>G2_Animation_Differents_objets_en_mouvement</artifactId>
 	<version>0.0.1</version>
 
 	<dependencies>

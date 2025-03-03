@@ -1,4 +1,3 @@
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Polygon;
 import java.util.ArrayList;
@@ -7,6 +6,12 @@ import java.util.List;
 import org.joml.Vector2d;
 
 import lu.pcy113.pclib.PCUtils;
+
+import balls.Ball;
+import balls.EmoHappy;
+import balls.EmoSmile;
+import balls.EmoSurprised;
+import balls.EmoUnSmile;
 
 public class Balls {
 
@@ -55,8 +60,26 @@ public class Balls {
 	}
 
 	public void addBall() {
-		balls.add(new Ball(new Vector2d(PCUtils.randomIntRange(0, 200), PCUtils.randomIntRange(0, 200)), new Vector2d(PCUtils.randomDoubleRange(10, 300), PCUtils.randomDoubleRange(10, 300)), 300,
-				PCUtils.randomIntRange(10, 50), PCUtils.randomColor(false)));
+		final int rand = PCUtils.randomIntRange(0, 4);
+		switch (rand) {
+		case 0:
+			balls.add(new EmoSmile(new Vector2d(PCUtils.randomIntRange(0, 200), PCUtils.randomIntRange(0, 200)), new Vector2d(PCUtils.randomDoubleRange(10, 300), PCUtils.randomDoubleRange(10, 300)),
+					300, 50, PCUtils.randomColor(false)));
+			break;
+		case 1:
+			balls.add(new EmoSurprised(new Vector2d(PCUtils.randomIntRange(0, 200), PCUtils.randomIntRange(0, 200)),
+					new Vector2d(PCUtils.randomDoubleRange(10, 300), PCUtils.randomDoubleRange(10, 300)), 300, 50, PCUtils.randomColor(false)));
+			break;
+		case 2:
+			balls.add(new EmoUnSmile(new Vector2d(PCUtils.randomIntRange(0, 200), PCUtils.randomIntRange(0, 200)), new Vector2d(PCUtils.randomDoubleRange(10, 300), PCUtils.randomDoubleRange(10, 300)),
+					300, 50, PCUtils.randomColor(false)));
+			break;
+		case 3:
+			balls.add(new EmoHappy(new Vector2d(PCUtils.randomIntRange(0, 200), PCUtils.randomIntRange(0, 200)), new Vector2d(PCUtils.randomDoubleRange(10, 300), PCUtils.randomDoubleRange(10, 300)),
+					300, 50, PCUtils.randomColor(false)));
+			break;
+
+		}
 	}
 
 }

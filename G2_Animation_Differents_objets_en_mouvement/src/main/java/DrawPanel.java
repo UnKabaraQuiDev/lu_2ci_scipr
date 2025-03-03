@@ -34,7 +34,7 @@ public class DrawPanel extends JPanel {
 		super.paintComponent(g);
 		balls.drawBalls((Graphics2D) g, new Vector2d(getWidth(), getHeight()));
 
-		balls.drawLine((Graphics2D) g);
+		// balls.drawLine((Graphics2D) g);
 	}
 
 	public Balls getBalls() {

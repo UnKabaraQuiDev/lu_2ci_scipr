@@ -1,7 +1,6 @@
+package balls;
 import java.awt.Color;
 import java.awt.Graphics2D;
-
-import javax.swing.JPanel;
 
 import org.joml.Vector2d;
 
@@ -13,7 +12,7 @@ public class Ball {
 	private Vector2d velocity;
 	private int radius;
 	private Color color;
-
+	
 	public Ball(Vector2d center, Vector2d velocity, double speed, int radius, Color color) {
 		this.center = center;
 		this.velocity = velocity.normalize().mul(speed);
