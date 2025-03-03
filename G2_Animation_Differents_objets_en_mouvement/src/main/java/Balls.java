@@ -9,8 +9,10 @@ import lu.pcy113.pclib.PCUtils;
 
 import balls.Ball;
 import balls.EmoHappy;
+import balls.EmoNeural;
 import balls.EmoSmile;
 import balls.EmoSurprised;
+import balls.EmoTongue;
 import balls.EmoUnSmile;
 
 public class Balls {
@@ -60,7 +62,7 @@ public class Balls {
 	}
 
 	public void addBall() {
-		final int rand = PCUtils.randomIntRange(0, 4);
+		final int rand = PCUtils.randomIntRange(0, 6);
 		switch (rand) {
 		case 0:
 			balls.add(new EmoSmile(new Vector2d(PCUtils.randomIntRange(0, 200), PCUtils.randomIntRange(0, 200)), new Vector2d(PCUtils.randomDoubleRange(10, 300), PCUtils.randomDoubleRange(10, 300)),
@@ -78,7 +80,14 @@ public class Balls {
 			balls.add(new EmoHappy(new Vector2d(PCUtils.randomIntRange(0, 200), PCUtils.randomIntRange(0, 200)), new Vector2d(PCUtils.randomDoubleRange(10, 300), PCUtils.randomDoubleRange(10, 300)),
 					300, 50, PCUtils.randomColor(false)));
 			break;
-
+		case 4:
+			balls.add(new EmoNeural(new Vector2d(PCUtils.randomIntRange(0, 200), PCUtils.randomIntRange(0, 200)), new Vector2d(PCUtils.randomDoubleRange(10, 300), PCUtils.randomDoubleRange(10, 300)),
+					300, 50, PCUtils.randomColor(false)));
+			break;
+		case 5:
+			balls.add(new EmoTongue(new Vector2d(PCUtils.randomIntRange(0, 200), PCUtils.randomIntRange(0, 200)), new Vector2d(PCUtils.randomDoubleRange(10, 300), PCUtils.randomDoubleRange(10, 300)),
+					300, 50, PCUtils.randomColor(false)));
+			break;
 		}
 	}
 
