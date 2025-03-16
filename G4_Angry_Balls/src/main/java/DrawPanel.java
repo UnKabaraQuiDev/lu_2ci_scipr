@@ -1,50 +1,33 @@
-import java.awt.BasicStroke;
+
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 
-import javax.swing.JPanel;
-import javax.swing.Timer;
+public class DrawPanel extends javax.swing.JPanel {
 
-import org.joml.Vector2d;
+	private Game game = null;
 
-public class DrawPanel extends JPanel {
-
-	public static int FPS = 120;
-	public static double SIMULATION_SPEED = 1;
-
-	private Timer timer;
-
-	private Game game;
-
-	public DrawPanel(MainFrame mainFrame, Game balls2) {
-		this.game = balls2;
-
-		timer = new Timer(1000 / FPS, e -> {
-			game.fixedUpdate((double) 1 / FPS * SIMULATION_SPEED, new Vector2d(getWidth(), getHeight()));
-			repaint();
-		});
-
-		timer.start();
-	}
-
-	@Override
-	protected void paintComponent(Graphics g) {
-		((Graphics2D) g).setStroke(new BasicStroke(2));
-
-		super.paintComponent(g);
-
-		game.draw((Graphics2D) g);
-
-		// balls.drawLine((Graphics2D) g);
-	}
-
-	public Game getGame() {
-		return game;
+	public DrawPanel() {
+		initComponents();
 	}
 
 	public void setGame(Game game) {
 		this.game = game;
+	}
+
+	@Override
+	public void paintComponent(Graphics g) {
+		g.setColor(Color.BLACK);
+		g.fillRect(0, 0, getWidth(), getHeight());
+		if (game != null) {
+			game.draw(g);
+		}
+	}
+
+	private void initComponents() {
+		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+		this.setLayout(layout);
+		layout.setHorizontalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(0, 400, Short.MAX_VALUE));
+		layout.setVerticalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(0, 300, Short.MAX_VALUE));
 	}
 
 }

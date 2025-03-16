@@ -1,97 +1,110 @@
-import java.awt.Color;
-import java.awt.Graphics2D;
-import java.awt.event.MouseEvent;
-import java.util.ArrayList;
-import java.util.List;
 
-import org.joml.Vector2d;
-import org.joml.Vector2i;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Point;
+import java.util.ArrayList;
 
 import lu.pcy113.pclib.PCUtils;
 
-import balls.Ball;
-import balls.MovingBall;
-
 public class Game {
 
-	protected static final double DEFAULT_SPEED = 2;
+	private int width = 0, height = 0;
+	private MovingBall playerBall = null;
+	private ArrayList<Ball> alBalls = new ArrayList<>();
+	private Point mousePoint = null;
+	private int redBallsCount = 0;
 
-	private Vector2i viewportSize;
+	public Game(int width, int height) {
+		this.width = width;
+		this.height = height;
 
-	private List<Ball> ennemyBalls = new ArrayList<>();
-	private MovingBall playerBall;
+		redBallsCount = 10;
 
-	public double simulationSpeed = DEFAULT_SPEED;
-	public int ballCount = 8;
+		for (int i = 0; i < redBallsCount; i++) {
+			int radius = 20;
+			double x = PCUtils.randomIntRange(width / 2, width - 2 * radius);
+			double y = PCUtils.randomIntRange(height / 4, height - 2 * radius);
 
-	private Vector2d mousePosition;
+			alBalls.add(new Ball(x, y, radius, Color.RED));
+		}
 
-	public Game(Vector2i viewport) {
-		this.viewportSize = viewport;
+		int radius = 20;
+		double x = radius;
+		double y = height - radius;
+
+		playerBall = new MovingBall(x, y, radius, Color.GREEN);
+		alBalls.add(playerBall);
 	}
 
-	public void genBalls() {
-		final double width = viewportSize.x, height = viewportSize.y;
-		for (int i = 0; i < ballCount; i++) {
-			this.ennemyBalls.add(new Ball(new Vector2d(PCUtils.randomDoubleRange(width / 2, width), PCUtils.randomDoubleRange(height / 4, height)), 25, Color.RED));
+	public void setPlayerBallSteps() {
+		if (mousePoint != null) {
+			double dX = (mousePoint.x - playerBall.getX()) / 20;
+			double dY = (mousePoint.y - playerBall.getY()) / 20;
+			playerBall.setdX(dX);
+			playerBall.setdY(dY);
 		}
 	}
 
-	public void fixedUpdate(double dTime, Vector2d viewportSize) {
-		// ennemyBalls.forEach(b -> b.fixedUpdate(dTime * simulationSpeed,
-		// viewportSize));
+	public void draw(Graphics g) {
 
-		if (mousePosition != null)
-			return;
-
-		if (playerBall != null)
-			playerBall.fixedUpdate(dTime * simulationSpeed, viewportSize);
-	}
-
-	public void draw(Graphics2D g2d) {
-		g2d.setColor(Color.YELLOW);
-		g2d.fillRect(viewportSize.x / 3, viewportSize.y / 2, 10, viewportSize.y / 2);
-		
-		if (mousePosition != null) {
-			g2d.setColor(Color.BLACK);
-			g2d.drawLine((int) playerBall.getCenter().x, (int) playerBall.getCenter().y, (int) mousePosition.x, (int) mousePosition.y);
+		for (Ball ball : alBalls) {
+			ball.draw(g);
 		}
 
-		ennemyBalls.forEach(b -> b.draw(g2d, viewportSize));
-		if (playerBall != null)
-			playerBall.draw(g2d, viewportSize);
+		g.setColor(Color.YELLOW);
+		g.fillRect(width / 3, height / 2, 10, height / 2);
+
+		if (mousePoint != null) {
+			g.setColor(Color.WHITE);
+			g.drawLine((int) playerBall.getX(), (int) playerBall.getY(), mousePoint.x, mousePoint.y);
+		}
 	}
 
-	public void setMousePosition(Vector2d mousePosition) {
-		this.mousePosition = mousePosition;
+	public int move() {
+
+		playerBall.move();
+
+		int r = playerBall.getRadius();
+		if (((width / 3 <= playerBall.getX() + r) && (playerBall.getX() - r <= width / 3 + 10)) && (height / 2 <= playerBall.getY() + r)) {
+
+			playerBall.setdX(0);
+			playerBall.setX(width / 3 - r);
+		}
+
+		for (int i = 0; i < redBallsCount; i++) {
+			Ball redBall = alBalls.get(i);
+			if (redBall.isTouching(playerBall)) {
+				alBalls.remove(i);
+				redBallsCount--;
+			}
+		}
+
+		if (playerBall.getX() - playerBall.getRadius() < 0 || playerBall.getX() + playerBall.getRadius() > width || playerBall.getY() + playerBall.getRadius() > height) {
+
+			return 1;
+		} else {
+			return 0;
+		}
 	}
 
-	public Vector2d getMousePosition() {
-		return mousePosition;
+	public void playerBallReset() {
+		int radius = 20;
+		double x = radius;
+		double y = height - radius;
+
+		playerBall.setX(x);
+		playerBall.setY(y);
+
+		playerBall.setdX(0.0);
+		playerBall.setdY(0.0);
 	}
 
-	public List<Ball> getEnnemyBalls() {
-		return ennemyBalls;
+	public boolean isOver() {
+		return alBalls.size() - 1 == 0;
 	}
 
-	public void setEnnemyBalls(List<Ball> ennemyBalls) {
-		this.ennemyBalls = ennemyBalls;
-	}
-
-	public Ball getPlayerBall() {
-		return playerBall;
-	}
-
-	public void setPlayerBall(MovingBall playerBall) {
-		this.playerBall = playerBall;
-	}
-
-	public double getSimulationSpeed() {
-		return simulationSpeed;
-	}
-
-	public void setSimulationSpeed(double simulationSpeed) {
-		this.simulationSpeed = simulationSpeed;
+	public void setMousePosition(Point mousePoint) {
+		this.mousePoint = mousePoint;
 	}
 
 }

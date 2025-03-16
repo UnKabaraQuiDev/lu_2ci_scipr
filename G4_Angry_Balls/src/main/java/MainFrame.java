@@ -1,78 +1,139 @@
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.EventQueue;
-import java.awt.event.MouseAdapter;
+
 import java.awt.event.MouseEvent;
+import javax.swing.Timer;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
+public class MainFrame extends javax.swing.JFrame {
 
-import org.joml.Vector2d;
-import org.joml.Vector2i;
+	public Game game = null;
+	public Timer timer = null;
 
-import balls.MovingBall;
-
-public class MainFrame extends JFrame {
-
-	private static final long serialVersionUID = 3560832783052701936L;
-
-	private JPanel contentPane;
-
-	private DrawPanel drawPanel;
+	private int pressedMouseButton = 0;
 
 	public MainFrame() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
-		contentPane = new JPanel();
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		contentPane.setLayout(new BorderLayout());
+		initComponents();
+		game = new Game(drawPanel.getWidth(), drawPanel.getHeight());
+		drawPanel.setGame(game);
+		timer = new Timer(10, event -> {
+			if (game.move() == 1) {
+				game.playerBallReset();
+				updateView();
+				timer.stop();
+			}
+			if (game.isOver()) {
+				resetGame();
+			}
+			updateView();
+		});
+		setTitle("Angry Balls");
+	}
 
-		super.setExtendedState(JFrame.MAXIMIZED_BOTH);
-		super.setVisible(true);
-		super.pack();
+	public void updateView() {
+		drawPanel.repaint();
+	}
 
-		drawPanel = new DrawPanel(this, new Game(new Vector2i(super.getWidth(), super.getHeight())));
-		drawPanel.getGame().genBalls();
-		final int playerRadius = 20;
-		drawPanel.getGame().setPlayerBall(new MovingBall(new Vector2d(playerRadius / 2, super.getHeight() - playerRadius / 2), new Vector2d(0, 1), 0, playerRadius, Color.GREEN));
+	public void resetGame() {
+		game = new Game(drawPanel.getWidth(), drawPanel.getHeight());
+		drawPanel.setGame(game);
+		updateView();
+		timer.stop();
+	}
 
-		drawPanel.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseDragged(MouseEvent e) {
-				System.out.println(e.getPoint());
-				drawPanel.getGame().setMousePosition(new Vector2d(e.getPoint().x, e.getPoint().y));
+	private void initComponents() {
+
+		drawPanel = new DrawPanel();
+
+		setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+		drawPanel.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+			public void mouseDragged(java.awt.event.MouseEvent evt) {
+				drawPanelMouseDragged(evt);
+			}
+		});
+		drawPanel.addMouseListener(new java.awt.event.MouseAdapter() {
+			public void mouseClicked(java.awt.event.MouseEvent evt) {
+				drawPanelMouseClicked(evt);
 			}
 
-			@Override
-			public void mousePressed(MouseEvent e) {
-				// drawPanel.getGame().setSimulationSpeed(Game.DEFAULT_SPEED * 0.3);
-				System.out.println(e.getPoint());
+			public void mousePressed(java.awt.event.MouseEvent evt) {
+				drawPanelMousePressed(evt);
 			}
 
-			@Override
-			public void mouseReleased(MouseEvent e) {
-				// drawPanel.getGame().setSimulationSpeed(Game.DEFAULT_SPEED);
-				drawPanel.getGame().setMousePosition(null);
+			public void mouseReleased(java.awt.event.MouseEvent evt) {
+				drawPanelMouseReleased(evt);
 			}
 		});
 
-		contentPane.add(drawPanel);
+		javax.swing.GroupLayout drawPanelLayout = new javax.swing.GroupLayout(drawPanel);
+		drawPanel.setLayout(drawPanelLayout);
+		drawPanelLayout.setHorizontalGroup(drawPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(0, 400, Short.MAX_VALUE));
+		drawPanelLayout.setVerticalGroup(drawPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(0, 300, Short.MAX_VALUE));
 
-		setContentPane(contentPane);
+		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+		getContentPane().setLayout(layout);
+		layout.setHorizontalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addComponent(drawPanel, javax.swing.GroupLayout.DEFAULT_SIZE,
+				javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE));
+		layout.setVerticalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addComponent(drawPanel, javax.swing.GroupLayout.DEFAULT_SIZE,
+				javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE));
+
+		pack();
 	}
 
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					MainFrame frame = new MainFrame();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
+	private void drawPanelMousePressed(java.awt.event.MouseEvent evt) {
+		pressedMouseButton = evt.getButton();
+		if (pressedMouseButton == MouseEvent.BUTTON1 && !timer.isRunning()) {
+			game.setMousePosition(evt.getPoint());
+			updateView();
+		}
+	}
+
+	private void drawPanelMouseDragged(java.awt.event.MouseEvent evt) {
+		if (pressedMouseButton == MouseEvent.BUTTON1 && !timer.isRunning()) {
+			game.setMousePosition(evt.getPoint());
+			updateView();
+		}
+	}
+
+	private void drawPanelMouseReleased(java.awt.event.MouseEvent evt) {
+		if (pressedMouseButton == MouseEvent.BUTTON1 && !timer.isRunning()) {
+			game.setPlayerBallSteps();
+			game.setMousePosition(null);
+			timer.start();
+		}
+	}
+
+	private void drawPanelMouseClicked(java.awt.event.MouseEvent evt) {
+		pressedMouseButton = evt.getButton();
+		if (pressedMouseButton == MouseEvent.BUTTON3) {
+			resetGame();
+		}
+	}
+
+	public static void main(String args[]) {
+
+		try {
+			for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+				if ("Nimbus".equals(info.getName())) {
+					javax.swing.UIManager.setLookAndFeel(info.getClassName());
+					break;
 				}
 			}
+		} catch (ClassNotFoundException ex) {
+			java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+		} catch (InstantiationException ex) {
+			java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+		} catch (IllegalAccessException ex) {
+			java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+		} catch (javax.swing.UnsupportedLookAndFeelException ex) {
+			java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+		}
+
+		java.awt.EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				new MainFrame().setVisible(true);
+			}
 		});
 	}
+
+	private DrawPanel drawPanel;
 
 }
