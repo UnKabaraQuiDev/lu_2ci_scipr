@@ -45,9 +45,12 @@ public class Game {
 
 	private void checkCollisions() {
 		if (missile != null) {
-			invaders.removeIf(inv -> missile.intersects(inv));
-			if (invaders.isEmpty())
+			if (invaders.removeIf(inv -> missile.intersects(inv))) {
 				missile = null;
+			}
+			if (invaders.isEmpty()) {
+				missile = null;
+			}
 		}
 	}
 
