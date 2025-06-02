@@ -10,6 +10,7 @@ public class MainFrame extends JFrame {
 	
 	public MainFrame() {
 		super("Asteroid drawer ! !! !! ! ! v0.0.0.1-alpha");
+		super.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		drawPanel = new DrawPanel(this);
 		

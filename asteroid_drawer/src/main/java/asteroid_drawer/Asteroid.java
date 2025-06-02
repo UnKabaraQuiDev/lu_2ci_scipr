@@ -6,7 +6,7 @@ import java.awt.geom.Point2D;
 
 public class Asteroid extends Polygon {
 
-	public Point2D getCenter() {
+	public Point2D getCentroid() {
 		double area = 0;
         double centroidX = 0;
         double centroidY = 0;
@@ -51,6 +51,11 @@ public class Asteroid extends Polygon {
 	}
 
 	public void rotate(double angle) {
+	}
+
+	public void click(int x, int y) {
+		final Point2D.Double pt = new Point2D.Double(x, y);
+		addPoint((int) pt.getX(), (int) pt.getY());
 	}
 
 }
